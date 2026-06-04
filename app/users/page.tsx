@@ -1,110 +1,70 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/users/page.tsx)
-
-"use client";
-
-import { useEffect, useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import { supabase } from "@/lib/supabase";
-
 export default function UsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [filtered, setFiltered] = useState<any[]>([]);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    async function loadUsers() {
-      const { data: session } = await supabase.auth.getUser();
-      if (!session?.user) return;
-
-      const res = await fetch("/api/users/list");
-      const json = await res.json();
-
-      if (json.success) {
-        setUsers(json.data);
-        setFiltered(json.data);
-      }
-    }
-
-    loadUsers();
-  }, []);
-
-  useEffect(() => {
-    const s = search.toLowerCase();
-    setFiltered(
-      users.filter(
-        (u) =>
-          u.name.toLowerCase().includes(s) ||
-          u.email.toLowerCase().includes(s) ||
-          u.role.toLowerCase().includes(s)
-      )
-    );
-  }, [search, users]);
-
   return (
-    <div className="flex min-h-screen">
+    <div className="space-y-10">
 
-      {/* SIDEBAR */}
-      <Sidebar />
-
-      {/* MAIN CONTENT */}
-      <div className="flex-1 p-8">
-
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-semibold">Users</h1>
-
-          <button
-            onClick={() => alert("Add User form coming soon")}
-            className="px-4 py-2 bg-[var(--primary)] text-white rounded-md"
-          >
-            Add User
-          </button>
-        </div>
-
-        {/* SEARCH */}
-        <input
-          type="text"
-          placeholder="Search users..."
-          className="w-full p-3 border rounded-md mb-6"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        {/* TABLE */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-3">Name</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Role</th>
-                <th className="p-3">Created</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="p-4 text-center opacity-60">
-                    No users found
-                  </td>
-                </tr>
-              )}
-
-              {filtered.map((u) => (
-                <tr key={u.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{u.name}</td>
-                  <td className="p-3">{u.email}</td>
-                  <td className="p-3 capitalize">{u.role}</td>
-                  <td className="p-3">
-                    {new Date(u.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+      {/* HEADER */}
+      <div>
+        <h1 className="text-4xl font-bold">Članovi</h1>
+        <p className="text-gray-600 mt-2">
+          Pregled svih registriranih članova kluba.
+        </p>
       </div>
+
+      {/* TABLE */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-100 border-b">
+            <tr>
+              <th className="p-4 font-semibold text-gray-700">Ime i prezime</th>
+              <th className="p-4 font-semibold text-gray-700">Email</th>
+              <th className="p-4 font-semibold text-gray-700">Status</th>
+              <th className="p-4 font-semibold text-gray-700">Akcije</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr className="border-b hover:bg-gray-50">
+              <td className="p-4">Marko Horvat</td>
+              <td className="p-4">marko@example.com</td>
+              <td className="p-4">
+                <span className="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full">
+                  Aktivan
+                </span>
+              </td>
+              <td className="p-4">
+                <button className="text-blue-600 hover:underline">Detalji</button>
+              </td>
+            </tr>
+
+            <tr className="border-b hover:bg-gray-50">
+              <td className="p-4">Ana Kovač</td>
+              <td className="p-4">ana@example.com</td>
+              <td className="p-4">
+                <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-full">
+                  Na čekanju
+                </span>
+              </td>
+              <td className="p-4">
+                <button className="text-blue-600 hover:underline">Detalji</button>
+              </td>
+            </tr>
+
+            <tr className="hover:bg-gray-50">
+              <td className="p-4">Ivan Marić</td>
+              <td className="p-4">ivan@example.com</td>
+              <td className="p-4">
+                <span className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full">
+                  Neaktivan
+                </span>
+              </td>
+              <td className="p-4">
+                <button className="text-blue-600 hover:underline">Detalji</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   );
 }
