@@ -1,63 +1,68 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/dashboard/page.tsx)
-
-"use client";
-
-import Sidebar from "@/components/Sidebar";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<any>(null);
-
-  useEffect(() => {
-    async function loadProfile() {
-      const { data } = await supabase.auth.getUser();
-      if (!data?.user) return;
-
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", data.user.id)
-        .single();
-
-      setProfile(profileData);
-    }
-
-    loadProfile();
-  }, []);
-
   return (
-    <div className="flex min-h-screen">
+    <div className="space-y-10">
 
-      {/* SIDEBAR */}
-      <Sidebar />
+      {/* HERO SECTION */}
+      <div>
+        <h1 className="text-4xl font-bold">Dobrodošli u ABASA Sport</h1>
+        <p className="text-gray-600 mt-2">
+          Pregled ključnih informacija o vašem klubu.
+        </p>
+      </div>
 
-      {/* MAIN CONTENT */}
-      <div className="flex-1 p-8">
+      {/* CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <h1 className="text-3xl font-semibold mb-6">
-          Dashboard
-        </h1>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold">Ukupno članova</h3>
+          <p className="text-3xl font-bold mt-2">128</p>
+          <p className="text-sm text-gray-500 mt-1">Aktivni i registrirani</p>
+        </div>
 
-        {profile ? (
-          <div className="card">
-            <h2 className="text-xl font-medium mb-2">
-              Welcome, {profile.name}
-            </h2>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold">Treneri</h3>
+          <p className="text-3xl font-bold mt-2">6</p>
+          <p className="text-sm text-gray-500 mt-1">Licencirani treneri</p>
+        </div>
 
-            <p className="opacity-70">
-              Role: {profile.role}
-            </p>
-
-            <p className="opacity-70">
-              Club ID: {profile.club_id}
-            </p>
-          </div>
-        ) : (
-          <p className="opacity-60">Loading...</p>
-        )}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold">Grupe</h3>
+          <p className="text-3xl font-bold mt-2">12</p>
+          <p className="text-sm text-gray-500 mt-1">Aktivne trenažne grupe</p>
+        </div>
 
       </div>
+
+      {/* QUICK LINKS */}
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <h3 className="text-xl font-semibold mb-4">Brzi linkovi</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <a
+            href="/users"
+            className="p-4 border rounded-lg hover:bg-gray-50 transition"
+          >
+            Upravljanje članovima →
+          </a>
+
+          <a
+            href="/club"
+            className="p-4 border rounded-lg hover:bg-gray-50 transition"
+          >
+            Informacije o klubu →
+          </a>
+
+          <a
+            href="/settings"
+            className="p-4 border rounded-lg hover:bg-gray-50 transition"
+          >
+            Postavke sustava →
+          </a>
+
+        </div>
+      </div>
+
     </div>
   );
 }
