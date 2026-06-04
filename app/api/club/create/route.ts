@@ -1,52 +1,37 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/api/club/create/route.ts)
-
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { requireAuth } from "@/middleware/auth";
 import { requireRole } from "@/middleware/role";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
+  const body = await req.json();
+  const { name, description } = body;
+
   // AUTH
-  const authResult = await requireAuth(req as any, NextResponse);
-  if (authResult instanceof NextResponse) return authResult;
+  await requireAuth(req as any, NextResponse);
 
   // ROLE → samo superadmin
-  const roleResult = await requireRole(req as any, NextResponse, ["superadmin"]);
-  if (roleResult instanceof NextResponse) return roleResult;
+  await requireRole(req as any, NextResponse, ["superadmin"]);
 
-  const body = await req.json();
-  const { name, sport, currency } = body;
-
-  if (!name || !sport || !currency) {
-    return NextResponse.json(
-      { success: false, error: "Missing required fields" },
-      { status: 400 }
-    );
-  }
-
-  // 1) KREIRAJ KLUB
-  const { data: club, error: clubError } = await supabase
+  // Kreiraj klub
+  const { data, error } = await supabase
     .from("clubs")
     .insert({
       name,
-      sport,
-      currency,
+      description,
     })
     .select()
     .single();
 
-  if (clubError) {
+  if (error) {
     return NextResponse.json(
-      { success: false, error: clubError.message },
-      { status: 500 }
+      { error: error.message },
+      { status: 400 }
     );
   }
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: club,
-    },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    message: "Club created successfully",
+    club: data,
+  });
 }
