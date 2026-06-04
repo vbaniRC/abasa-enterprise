@@ -1,51 +1,40 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/api/club/my/route.ts)
-
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { requireAuth } from "@/middleware/auth";
 import { requireRole } from "@/middleware/role";
+import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   // AUTH
-  const authResult = await requireAuth(req as any, NextResponse);
-  if (authResult instanceof NextResponse) return authResult;
+  await requireAuth(req as any, NextResponse);
 
   // ROLE → bilo tko tko pripada klubu
-  const roleResult = await requireRole(req as any, NextResponse, [
+  await requireRole(req as any, NextResponse, [
     "admin",
+    "owner",
     "coach",
     "parent",
     "member",
+    "superadmin",
   ]);
-  if (roleResult instanceof NextResponse) return roleResult;
 
   const user: any = (req as any).user;
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("club_id")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile?.club_id) {
-    return NextResponse.json(
-      { success: false, error: "User has no club assigned" },
-      { status: 404 }
-    );
-  }
-
-  const { data: club, error: clubError } = await supabase
+  // Dohvati klub kojem user pripada
+  const { data: club, error } = await supabase
     .from("clubs")
     .select("*")
-    .eq("id", profile.club_id)
+    .eq("id", user?.club_id)
     .single();
 
-  if (clubError || !club) {
+  if (error) {
     return NextResponse.json(
-      { success: false, error: "Club not found" },
-      { status: 404 }
+      { error: error.message },
+      { status: 400 }
     );
   }
 
-  return NextResponse.json({ success: true, data: club }, { status: 200 });
+  return NextResponse.json({
+    message: "My club fetched successfully",
+    club,
+  });
 }
