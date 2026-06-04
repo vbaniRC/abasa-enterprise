@@ -3,26 +3,14 @@ import { requireAuth } from "@/middleware/auth";
 import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
-  const authResult = await requireAuth(req as any, NextResponse);
-  if (authResult instanceof NextResponse) return authResult;
+  // Placeholder auth – samo pozivamo funkciju, ne provjeravamo ništa
+  await requireAuth(req as any, NextResponse);
 
-  const user: any = (req as any).user;
+  // Placeholder user – u pravom authu bi ovo dolazilo iz middleware-a
+  const user = (req as any).user || null;
 
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !profile) {
-    return NextResponse.json(
-      { success: false, error: "Profile not found" },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json(
-    { success: true, data: profile },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    message: "Authenticated",
+    user,
+  });
 }

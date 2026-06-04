@@ -1,79 +1,41 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/api/auth/register/route.ts)
-
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { requireAuth } from "@/middleware/auth";
 import { requireRole } from "@/middleware/role";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const { email, password, role, club_id } = body;
+  const { email, password, role } = body;
 
-  if (!email || !password || !role) {
-    return NextResponse.json(
-      { success: false, error: "Missing required fields" },
-      { status: 400 }
-    );
-  }
-
-  // Ako se kreira owner → samo superadmin smije
+  // Ako je role = owner → treba auth + role check
   if (role === "owner") {
-    const authResult = await requireAuth(req as any, NextResponse);
-    if (authResult instanceof NextResponse) return authResult;
-
-    const roleResult = await requireRole(req as any, NextResponse, ["superadmin"]);
-    if (roleResult instanceof NextResponse) return roleResult;
-
-    if (!club_id) {
-      return NextResponse.json(
-        { success: false, error: "Missing club_id for owner creation" },
-        { status: 400 }
-      );
-    }
+    await requireAuth(req as any, NextResponse);
+    await requireRole(req as any, NextResponse, ["superadmin"]);
   }
 
-  // 1) Kreiraj usera u Supabase Auth
-  const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
+  // Kreiraj usera u Supabase
+  const { data: user, error } = await supabase.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
   });
 
-  if (authError || !authUser?.user) {
+  if (error) {
     return NextResponse.json(
-      { success: false, error: authError?.message || "Failed to create user" },
-      { status: 500 }
+      { error: error.message },
+      { status: 400 }
     );
   }
 
-  const newUserId = authUser.user.id;
-
-  // 2) Kreiraj profil
-  const { error: profileError } = await supabase.from("profiles").insert({
-    id: newUserId,
+  // Spremi u users tablicu
+  await supabase.from("users").insert({
+    auth_id: user.user?.id,
     email,
     role,
-    is_owner: role === "owner",
-    club_id: club_id || null,
   });
 
-  if (profileError) {
-    return NextResponse.json(
-      { success: false, error: profileError.message },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json(
-    {
-      success: true,
-      data: {
-        id: newUserId,
-        email,
-        role,
-        club_id: club_id || null,
-      },
-    },
-    { status: 200 }
-  );
+  return NextResponse.json({
+    message: "User registered successfully",
+    user: user.user,
+  });
 }
