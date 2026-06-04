@@ -43,7 +43,8 @@ export default function ClubPage() {
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
         <h3 className="text-xl font-semibold mb-4">Treneri</h3>
 
-        <ul classname="space-y-3">
+        <ul className="space-y-3">
+
           <li className="p-3 border rounded-lg hover:bg-gray-50 transition">
             Marko Horvat — Glavni trener
           </li>
