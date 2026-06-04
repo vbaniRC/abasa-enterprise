@@ -1,35 +1,36 @@
-// (GITHUB-PUTANJA-FILE: /abasa-sport/app/api/users/me/route.ts)
-
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
 import { requireAuth } from "@/middleware/auth";
+import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   // AUTH
-  const authResult = await requireAuth(req as any, NextResponse);
-  if (authResult instanceof NextResponse) return authResult;
+  await requireAuth(req as any, NextResponse);
 
   const user: any = (req as any).user;
 
-  // DOHVATI PROFIL
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("id, email, role, is_owner, club_id, name, avatar_url")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !profile) {
+  if (!user) {
     return NextResponse.json(
-      { success: false, error: "Profile not found" },
-      { status: 404 }
+      { error: "User not found in request context" },
+      { status: 400 }
     );
   }
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: profile,
-    },
-    { status: 200 }
-  );
+  // Dohvati usera iz baze
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("auth_id", user.auth_id)
+    .single();
+
+  if (error) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json({
+    message: "User fetched successfully",
+    user: data,
+  });
 }
