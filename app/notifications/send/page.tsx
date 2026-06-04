@@ -93,6 +93,24 @@ export default function SendNotificationPage() {
           </select>
         </div>
 
+       <div>
+  <label className="block mb-1">Send to Coach</label>
+  <select
+    name="coach_id"
+    className="w-full px-4 py-2 border rounded-md"
+    value={form.coach_id}
+    onChange={handleChange}
+  >
+    <option value="">— None —</option>
+    {coaches.map((c) => (
+      <option key={c.id} value={c.id}>
+        {c.first_name} {c.last_name}
+      </option>
+    ))}
+  </select>
+</div>
+
+        
         <div>
           <label className="block mb-1">Title</label>
           <input
