@@ -1,8 +1,8 @@
-export default function HomePage() {
+export default function Home() {
   return (
-    <main>
-      <h1>ABASA Clean Start</h1>
-      <p>Next.js struktura radi.</p>
-    </main>
+    <div style={{ padding: 40 }}>
+      <h1>ABASA Sport</h1>
+      <p>Welcome to the platform.</p>
+    </div>
   );
 }
