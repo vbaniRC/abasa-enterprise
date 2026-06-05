@@ -1,4 +1,10 @@
-@import "../styles/globals.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
