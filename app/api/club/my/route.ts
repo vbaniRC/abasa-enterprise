@@ -1,34 +1,16 @@
 import { NextResponse } from "next/server";
-//import { requireAuth } from "@/lib/middleware/auth";
-//import { requireRole } from "@/lib/middleware/role";
 import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
-  // AUTH
-  await requireAuth(req as any, NextResponse);
+  // TEMP: nema auth-a dok ne vratiš middleware
+  const user = { club_id: null };
 
-  // ROLE → bilo tko tko pripada klubu
- 
-
- const user = (req as any).user;
-
-
-  // Dohvati klub kojem user pripada
-  const { data: club, error } = await supabase
-    .from("clubs")
-    .select("*")
-    .eq("id", user?.club_id)
-    .single();
-
-  if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
-    );
-  }
-
-  return NextResponse.json({
-    message: "My club fetched successfully",
-    club,
-  });
+  // Ako želiš da ruta radi bez auth-a:
+  return NextResponse.json(
+    {
+      message: "Auth middleware removed — implement later",
+      club: null,
+    },
+    { status: 200 }
+  );
 }
