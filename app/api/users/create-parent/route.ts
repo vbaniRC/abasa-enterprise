@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
-
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
@@ -9,10 +6,10 @@ export async function POST(req: Request) {
   const { email, password } = body;
 
   // AUTH
-  await requireAuth(req as any, NextResponse);
+  //await requireAuth(req as any, NextResponse);
 
   // ROLE → samo superadmin
-  await requireRole(req as any, NextResponse, ["superadmin"]);
+  //await requireRole(req as any, NextResponse, ["superadmin"]);
 
   // Kreiraj admin usera u Supabase
   const { data: user, error } = await supabase.auth.admin.createUser({

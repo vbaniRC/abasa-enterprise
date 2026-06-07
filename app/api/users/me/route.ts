@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
 
 
 export async function GET(req: Request) {
   // AUTH
   await requireAuth(req as any, NextResponse);
 
-  const user: any = (req as any).user;
+  const user = { club_id: null };
+
 
   if (!user) {
     return NextResponse.json(

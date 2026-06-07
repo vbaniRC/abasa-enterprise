@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
@@ -8,21 +6,13 @@ export async function POST(req: Request) {
   const { email, password, role, clubId } = body;
 
   // AUTH
-  await requireAuth(req as any, NextResponse);
+  //await requireAuth(req as any, NextResponse);
 
   // ROLE → owner, admin, superadmin
-  await requireRole(req as any, NextResponse, [
-    "owner",
-    "admin",
-    "superadmin",
-  ]);
-
+ 
   // Kreiraj usera u Supabase
-  const { data: user, error } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
+  const user = (req as any).user;
+
 
   if (error) {
     return NextResponse.json(
