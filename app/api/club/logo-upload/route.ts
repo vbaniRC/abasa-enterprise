@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
+//import { requireAuth } from "@/lib/middleware/auth";
+//import { requireRole } from "@/lib/middleware/role";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
@@ -9,14 +9,14 @@ export async function POST(req: Request) {
   const file = formData.get("file") as File;
 
   // AUTH
-  await requireAuth(req as any, NextResponse);
+  //await requireAuth(req as any, NextResponse);
 
   // ROLE → admin, owner, superadmin
-  await requireRole(req as any, NextResponse, [
-    "admin",
-    "owner",
-    "superadmin",
-  ]);
+  //await requireRole(req as any, NextResponse, [
+  //  "admin",
+  //  "owner",
+  //  "superadmin",
+  //]);
 
   if (!file) {
     return NextResponse.json(

@@ -1,29 +1,14 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
 import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
-  // AUTH
-  await requireAuth(req as any, NextResponse);
+  // TEMP: no auth
+  const user = { club_id: null };
 
-  // ROLE → admin, owner, coach, parent, member, superadmin
-  await requireRole(req as any, NextResponse, [
-    "admin",
-    "owner",
-    "coach",
-    "parent",
-    "member",
-    "superadmin",
-  ]);
-
-  const user: any = (req as any).user;
-
-  // Dohvati sve članove kluba kojem user pripada
   const { data: members, error } = await supabase
     .from("users")
     .select("*")
-    .eq("club_id", user?.club_id);
+    .eq("club_id", user.club_id);
 
   if (error) {
     return NextResponse.json(
