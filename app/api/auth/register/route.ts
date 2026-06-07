@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
-import { requireRole } from "@/lib/middleware/role";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
@@ -9,8 +7,8 @@ export async function POST(req: Request) {
 
   // Ako je role = owner → treba auth + role check
   if (role === "owner") {
-    await requireAuth(req as any, NextResponse);
-    await requireRole(req as any, NextResponse, ["superadmin"]);
+    //await requireAuth(req as any, NextResponse);
+    //await requireRole(req as any, NextResponse, ["superadmin"]);
   }
 
   // Kreiraj usera u Supabase

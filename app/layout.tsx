@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "ABASA",
   description: "Management Panel",
@@ -6,7 +8,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-black text-white">{children}</body>
     </html>
   );
 }
