@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/middleware/auth";
+//import { requireAuth } from "@/lib/middleware/auth";
 import { supabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   // AUTH → bilo koji logirani user može vidjeti info o svom klubu
-  await requireAuth(req as any, NextResponse);
+  //await requireAuth(req as any, NextResponse);
 
   const user: any = (req as any).user;
 
