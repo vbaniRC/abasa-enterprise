@@ -2,46 +2,52 @@ export default function LoginPage() {
   return (
     <div className="bg-white border border-neutral-200 rounded-xl shadow-sm p-10">
       <h1 className="text-xl font-semibold text-neutral-900 mb-8">
-        Sign in to your account
+        Log in to Vercel
       </h1>
 
-      <form className="space-y-6">
-        <div className="flex flex-col space-y-2">
-          <label className="text-sm font-medium text-neutral-700">
-            Email
-          </label>
-          <input
-            type="email"
-            placeholder="you@example.com"
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
-          />
-        </div>
+      <div className="space-y-4">
 
-        <div className="flex flex-col space-y-2">
-          <label className="text-sm font-medium text-neutral-700">
-            Password
-          </label>
-          <input
-            type="password"
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-black text-white py-2.5 rounded-md text-sm font-medium hover:bg-neutral-800 transition"
-        >
-          Sign In
+        {/* Continue with Email */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition">
+          Continue with Email
         </button>
-      </form>
+
+        {/* Continue with Google */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition flex items-center justify-center gap-2">
+          <span>Continue with Google</span>
+        </button>
+
+        {/* Continue with GitHub */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition flex items-center justify-center gap-2">
+          <span>Continue with GitHub</span>
+        </button>
+
+        {/* Continue with Apple */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition flex items-center justify-center gap-2">
+          <span>Continue with Apple</span>
+        </button>
+
+        {/* Continue with SAML SSO */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition flex items-center justify-center gap-2">
+          <span>Continue with SAML SSO</span>
+        </button>
+
+        {/* Continue with Passkey */}
+        <button className="w-full border border-neutral-300 rounded-md py-2.5 text-sm font-medium hover:bg-neutral-50 transition flex items-center justify-center gap-2">
+          <span>Continue with Passkey</span>
+        </button>
+
+        <div className="text-center">
+          <button className="text-sm text-neutral-600 hover:underline">
+            Show other options
+          </button>
+        </div>
+      </div>
 
       <p className="text-sm text-neutral-600 mt-8 text-center">
         Don’t have an account?{" "}
-        <a
-          href="/auth/register"
-          className="text-black font-medium hover:underline"
-        >
-          Register
+        <a href="/auth/register" className="text-black font-medium hover:underline">
+          Sign Up
         </a>
       </p>
     </div>
