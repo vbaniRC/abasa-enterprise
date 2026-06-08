@@ -3,12 +3,17 @@ import { FaGithub, FaApple } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl shadow-lg p-10">
-      <h1 className="text-xl font-semibold text-neutral-900 mb-8">
-        Log in to ABASA
-      </h1>
+    <div className="bg-white text-black border border-neutral-200 rounded-xl shadow-lg p-10 w-full">
+      <h1 className="text-xl font-semibold mb-8">Log in to ABASA Clubs</h1>
 
       <div className="space-y-4">
+
+        {/* Email input */}
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full border border-neutral-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+        />
 
         {/* Continue with Email */}
         <button className="w-full border border-neutral-300 rounded-lg py-2.5 text-sm font-medium hover:bg-neutral-100 transition">
