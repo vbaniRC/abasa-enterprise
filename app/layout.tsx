@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  const isAuth = pathname.startsWith("/auth");
+  const isAuth = pathname?.startsWith("/auth") ?? false;
 
   return (
     <html lang="en">
