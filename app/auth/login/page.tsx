@@ -4,19 +4,28 @@ import { FaApple } from "react-icons/fa";
 export default function LoginPage() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0A0A] px-4">
+
       <div
         className="
-        w-full max-w-[420px]
-        rounded-3xl
+        w-full max-w-[380px]   /* smanjeno za ~10% */
+        rounded-[32px]         /* jako zaobljeni rubovi */
         p-10
-        border border-[#1A1A1A]
+        border border-[#161616]
         bg-gradient-to-b from-white/5 to-white/[0.02]
         backdrop-blur-xl
-        shadow-[0_0_45px_-10px_rgba(0,0,0,0.85)]
+        shadow-[0_0_50px_-12px_rgba(0,0,0,0.85)]
+        relative
       "
       >
-        <h1 className="text-xl font-semibold mb-8 text-center text-white tracking-tight">
-          Log in to ABASA Clubs
+
+        {/* ABASA Clubs - gornji desni kut */}
+        <div className="absolute top-6 right-6 text-white/70 text-xs font-medium tracking-wide">
+          ABASA Clubs
+        </div>
+
+        {/* Log in - centrirano */}
+        <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
+          Log in
         </h1>
 
         <div className="flex flex-col items-center gap-[20px]">
@@ -26,7 +35,7 @@ export default function LoginPage() {
             type="email"
             placeholder="Email Address"
             className="
-              w-1/2 h-14 px-3 text-sm
+              w-1/2 h-[58px] px-3 text-sm
               bg-black text-white
               border border-white/10
               rounded-lg
@@ -38,7 +47,7 @@ export default function LoginPage() {
           {/* Continue with Email */}
           <button
             className="
-            w-1/2 h-14 rounded-lg text-sm font-medium
+            w-1/2 h-[58px] rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -51,7 +60,7 @@ export default function LoginPage() {
           {/* Google */}
           <button
             className="
-            w-1/2 h-14 rounded-lg text-sm font-medium
+            w-1/2 h-[58px] rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -65,7 +74,7 @@ export default function LoginPage() {
           {/* Apple */}
           <button
             className="
-            w-1/2 h-14 rounded-lg text-sm font-medium
+            w-1/2 h-[58px] rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -79,7 +88,7 @@ export default function LoginPage() {
           {/* Passkey */}
           <button
             className="
-            w-1/2 h-14 rounded-lg text-sm font-medium
+            w-1/2 h-[58px] rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
