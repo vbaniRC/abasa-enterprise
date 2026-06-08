@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
       <body className="text-white font-sans">
         {isAuth ? (
           <div className="min-h-screen w-full flex items-center justify-center bg-black px-4">
-            <div className="w-full max-w-[420px] mx-auto">
+            <div className="w-full max-w-[460px] mx-auto">
               {children}
             </div>
           </div>
