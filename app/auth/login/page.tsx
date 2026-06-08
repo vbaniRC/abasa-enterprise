@@ -7,26 +7,26 @@ export default function LoginPage() {
       <div
         className="
         w-full max-w-[420px]
-        rounded-2xl
+        rounded-3xl
         p-10
-        border border-[#2A2A2A]
+        border border-[#1A1A1A]
         bg-gradient-to-b from-white/5 to-white/[0.02]
         backdrop-blur-xl
-        shadow-[0_0_40px_-10px_rgba(0,0,0,0.8)]
+        shadow-[0_0_45px_-10px_rgba(0,0,0,0.85)]
       "
       >
         <h1 className="text-xl font-semibold mb-8 text-center text-white tracking-tight">
           Log in to ABASA Clubs
         </h1>
 
-        <div className="flex flex-col items-center gap-[10px]">
+        <div className="flex flex-col items-center gap-[20px]">
 
           {/* Email input */}
           <input
             type="email"
             placeholder="Email Address"
             className="
-              w-1/2 h-12 px-3 text-sm
+              w-1/2 h-14 px-3 text-sm
               bg-black text-white
               border border-white/10
               rounded-lg
@@ -38,7 +38,7 @@ export default function LoginPage() {
           {/* Continue with Email */}
           <button
             className="
-            w-1/2 h-12 rounded-lg text-sm font-medium
+            w-1/2 h-14 rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -51,7 +51,7 @@ export default function LoginPage() {
           {/* Google */}
           <button
             className="
-            w-1/2 h-12 rounded-lg text-sm font-medium
+            w-1/2 h-14 rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -65,7 +65,7 @@ export default function LoginPage() {
           {/* Apple */}
           <button
             className="
-            w-1/2 h-12 rounded-lg text-sm font-medium
+            w-1/2 h-14 rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -79,7 +79,7 @@ export default function LoginPage() {
           {/* Passkey */}
           <button
             className="
-            w-1/2 h-12 rounded-lg text-sm font-medium
+            w-1/2 h-14 rounded-lg text-sm font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
