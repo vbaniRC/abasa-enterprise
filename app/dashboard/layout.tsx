@@ -1,3 +1,4 @@
+export const dynamic = "force-static";
 import Sidebar from "@/components/Sidebar";
 
 export default function DashboardLayout({
