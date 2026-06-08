@@ -1,45 +1,46 @@
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-neutral-950 border border-neutral-800 rounded-2xl p-10 shadow-2xl">
-        <h1 className="text-3xl font-semibold text-white text-center mb-8 tracking-tight">
-          Sign in to your account
-        </h1>
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
+      <h1 className="text-xl font-semibold text-neutral-900 mb-6">
+        Sign in to your account
+      </h1>
 
-        <form className="space-y-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-neutral-400 text-sm">Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full px-4 py-3 rounded-lg bg-neutral-900 text-white placeholder-neutral-600 border border-neutral-800 focus:outline-none focus:border-neutral-500 transition"
-            />
-          </div>
+      <form className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            placeholder="you@example.com"
+          />
+        </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-neutral-400 text-sm">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-3 rounded-lg bg-neutral-900 text-white placeholder-neutral-600 border border-neutral-800 focus:outline-none focus:border-neutral-500 transition"
-            />
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
+            Password
+          </label>
+          <input
+            type="password"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-neutral-200 transition"
-          >
-            Sign In
-          </button>
-        </form>
+        <button
+          type="submit"
+          className="w-full bg-black text-white py-2 rounded-md text-sm font-medium hover:bg-neutral-800 transition"
+        >
+          Sign In
+        </button>
+      </form>
 
-        <p className="text-neutral-500 text-sm text-center mt-8">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-white underline">
-            Register
-          </a>
-        </p>
-      </div>
+      <p className="text-sm text-neutral-600 mt-6 text-center">
+        Don’t have an account?{" "}
+        <a href="/auth/register" className="text-black font-medium hover:underline">
+          Register
+        </a>
+      </p>
     </div>
   );
-} 
+}
