@@ -1,7 +1,0 @@
-export default function AuthLayout({ children }) {
-  return (
-    <div className="min-h-screen bg-red-500 flex items-center justify-center">
-      {children}
-    </div>
-  );
-}
