@@ -10,11 +10,11 @@ export default function LoginPage() {
 
       <div className="flex flex-col items-center gap-6">
 
-        {/* Email input */}
+        {/* Email input – crna podloga */}
         <input
           type="email"
           placeholder="Email"
-          className="w-[90%] border border-neutral-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-[90%] h-12 bg-black text-white border border-neutral-700 rounded-lg px-3 text-sm focus:outline-none focus:ring-2 focus:ring-white"
         />
 
         {/* Continue with Email */}
@@ -45,10 +45,24 @@ export default function LoginPage() {
         </button>
       </div>
 
+      {/* Sign Up / Sign In links */}
       <p className="text-sm text-neutral-600 mt-10 text-center">
         Don’t have an account?{" "}
-        <a href="/auth/register" className="text-black font-medium hover:underline">
+        <a
+          href="/auth/register"
+          className="text-neutral-500 font-medium hover:underline"
+        >
           Sign Up
+        </a>
+      </p>
+
+      <p className="text-sm text-neutral-600 mt-2 text-center">
+        Already have an account?{" "}
+        <a
+          href="/auth/login"
+          className="text-neutral-500 font-medium hover:underline"
+        >
+          Sign In
         </a>
       </p>
     </div>
