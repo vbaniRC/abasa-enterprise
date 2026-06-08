@@ -1,5 +1,11 @@
 import "./globals.css";
+import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata = {
   title: "ABASA",
@@ -11,8 +17,8 @@ export default function RootLayout({ children }) {
   const isAuth = pathname?.startsWith("/auth") ?? false;
 
   return (
-    <html lang="en">
-      <body className="text-white">
+    <html lang="en" className={inter.variable}>
+      <body className="text-white font-sans">
         {isAuth ? (
           <div className="min-h-screen bg-black flex items-center justify-center px-4">
             <div className="w-full max-w-md">
