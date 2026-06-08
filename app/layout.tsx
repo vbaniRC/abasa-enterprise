@@ -1,4 +1,5 @@
 import "./globals.css";
+import { usePathname } from "next/navigation";
 
 export const metadata = {
   title: "ABASA",
@@ -6,9 +7,24 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+  const isAuth = pathname.startsWith("/auth");
+
   return (
     <html lang="en">
-      <body className="bg-black text-white">{children}</body>
+      <body className="text-white">
+        {isAuth ? (
+          <div className="min-h-screen bg-black flex items-center justify-center px-4">
+            <div className="w-full max-w-md">
+              {children}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-black min-h-screen">
+            {children}
+          </div>
+        )}
+      </body>
     </html>
   );
 }
