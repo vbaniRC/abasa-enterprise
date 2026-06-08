@@ -3,10 +3,18 @@ import { FaApple } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-black px-4">
-      <div className="w-full max-w-[420px] bg-[#111111] border border-neutral-800 rounded-2xl p-10 shadow-2xl">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0A0A] px-4">
+      <div className="
+        w-full max-w-[420px]
+        rounded-2xl
+        p-10
+        border border-white/10
+        bg-gradient-to-b from-white/5 to-white/[0.02]
+        backdrop-blur-xl
+        shadow-[0_0_40px_-10px_rgba(0,0,0,0.8)]
+      ">
 
-        <h1 className="text-xl font-semibold mb-8 text-center text-white">
+        <h1 className="text-xl font-semibold mb-8 text-center text-white tracking-tight">
           Log in to ABASA Clubs
         </h1>
 
@@ -16,28 +24,63 @@ export default function LoginPage() {
           <input
             type="email"
             placeholder="Email Address"
-            className="w-full h-12 bg-black text-white border border-neutral-700 rounded-lg px-3 text-sm focus:outline-none focus:ring-2 focus:ring-white"
+            className="
+              w-full h-12 px-3 text-sm
+              bg-black/60 text-white
+              border border-white/10
+              rounded-lg
+              focus:outline-none focus:ring-2 focus:ring-white/40
+              placeholder-white/40
+            "
           />
 
           {/* Continue with Email */}
-          <button className="w-full h-12 rounded-lg text-sm font-medium bg-white text-black hover:bg-neutral-200 transition flex items-center justify-center">
+          <button className="
+            w-full h-12 rounded-lg text-sm font-medium
+            bg-white text-black
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center
+            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
+          ">
             Continue with Email
           </button>
 
           {/* Google */}
-          <button className="w-full h-12 rounded-lg text-sm font-medium bg-white text-black hover:bg-neutral-200 transition flex items-center justify-center gap-2">
+          <button className="
+            w-full h-12 rounded-lg text-sm font-medium
+            bg-white text-black
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center gap-2
+            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
+          ">
             <FcGoogle size={18} />
             <span>Continue with Google</span>
           </button>
 
           {/* Apple */}
-          <button className="w-full h-12 rounded-lg text-sm font-medium bg-white text-black hover:bg-neutral-200 transition flex items-center justify-center gap-2">
+          <button className="
+            w-full h-12 rounded-lg text-sm font-medium
+            bg-white text-black
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center gap-2
+            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
+          ">
             <FaApple size={18} />
             <span>Continue with Apple</span>
           </button>
 
           {/* Passkey */}
-          <button className="w-full h-12 rounded-lg text-sm font-medium bg-white text-black hover:bg-neutral-200 transition flex items-center justify-center">
+          <button className="
+            w-full h-12 rounded-lg text-sm font-medium
+            bg-white text-black
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center
+            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
+          ">
             Continue with Passkey
           </button>
 
