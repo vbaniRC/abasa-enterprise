@@ -2,7 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ------------------------------
+   FONT: Inter (global override)
+--------------------------------*/
+:root {
+  --font-inter: 'Inter', sans-serif;
+}
+
 html, body {
   margin: 0;
   padding: 0;
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ------------------------------
+   RESET (Vercel-style)
+--------------------------------*/
+* {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Remove default input styles */
+input {
+  outline: none;
+}
+
+/* Remove blue autofill background on Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+/* ------------------------------
+   BODY BACKGROUND (default)
+--------------------------------*/
+body {
+  background-color: black;
+  color: white;
+}
+
+/* ------------------------------
+   SMOOTH TRANSITIONS
+--------------------------------*/
+a, button, input {
+  transition: all 0.15s ease;
 }
