@@ -9,7 +9,7 @@ export default function LoginPage() {
         w-full max-w-[420px]
         rounded-2xl
         p-10
-        border border-white/10
+        border border-[#2A2A2A]
         bg-gradient-to-b from-white/5 to-white/[0.02]
         backdrop-blur-xl
         shadow-[0_0_40px_-10px_rgba(0,0,0,0.8)]
@@ -19,14 +19,15 @@ export default function LoginPage() {
           Log in to ABASA Clubs
         </h1>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-[10px]">
+
           {/* Email input */}
           <input
             type="email"
             placeholder="Email Address"
             className="
-              w-full h-12 px-3 text-sm
-              bg-black/60 text-white
+              w-1/2 h-12 px-3 text-sm
+              bg-black text-white
               border border-white/10
               rounded-lg
               focus:outline-none focus:ring-2 focus:ring-white/40
@@ -42,7 +43,6 @@ export default function LoginPage() {
             hover:bg-neutral-200
             transition
             flex items-center justify-center
-            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
           "
           >
             Continue with Email
@@ -56,7 +56,6 @@ export default function LoginPage() {
             hover:bg-neutral-200
             transition
             flex items-center justify-center gap-2
-            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
           "
           >
             <FcGoogle size={18} />
@@ -71,7 +70,6 @@ export default function LoginPage() {
             hover:bg-neutral-200
             transition
             flex items-center justify-center gap-2
-            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
           "
           >
             <FaApple size={18} />
@@ -86,14 +84,13 @@ export default function LoginPage() {
             hover:bg-neutral-200
             transition
             flex items-center justify-center
-            shadow-[0_2px_8px_rgba(255,255,255,0.15)]
           "
           >
             Continue with Passkey
           </button>
 
           {/* Show other options */}
-          <button className="text-sm text-neutral-400 hover:underline mt-2">
+          <button className="text-sm text-neutral-400 hover:underline mt-1">
             Show other options
           </button>
         </div>
