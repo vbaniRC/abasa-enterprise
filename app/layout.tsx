@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={inter.variable}>
       <body className="text-white font-sans">
         {isAuth ? (
-          <div className="min-h-screen w-full flex items-center justify-center bg-black px-4">
+          <div className="min-h-screen w-full flex items-center justify-center bg-black">
             <div className="w-full max-w-[460px] mx-auto">
               {children}
             </div>
