@@ -3,7 +3,7 @@ import { FaApple } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0A0A] px-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
 
       <div
         className="
@@ -36,7 +36,7 @@ export default function LoginPage() {
               type="email"
               placeholder="Email Address"
               className="
-                w-full h-[26px] px-3 text-sm
+                w-full h-[24px] px-3 text-sm
                 bg-black text-white
                 border border-white/10
                 rounded-lg
@@ -64,7 +64,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
             transition
             flex items-center justify-center gap-2
           "
@@ -78,7 +78,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
             transition
             flex items-center justify-center gap-2
           "
@@ -92,7 +92,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
             transition
             flex items-center justify-center
           "
@@ -116,6 +116,11 @@ export default function LoginPage() {
             Sign Up
           </a>
         </p>
+      </div>
+
+      {/* Powered by Copilot */}
+      <div className="mt-6 text-[10px] text-neutral-600 tracking-wide">
+        Powered by Copilot
       </div>
     </div>
   );
