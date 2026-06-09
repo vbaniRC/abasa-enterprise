@@ -7,61 +7,43 @@ export async function POST(req: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: "Missing email or password" },
         { status: 400 }
       );
     }
 
-    // ADMIN KLIJENT — mora koristiti SUPABASE_URL (NE NEXT_PUBLIC!)
+    // 1) ADMIN KLIJENT — koristi SERVICE ROLE KEY
     const supabaseAdmin = createClient(
-      process.env.SUPABASE_URL!,               // FIX #1
-      process.env.SUPABASE_SERVICE_ROLE_KEY!   // service role
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // 1) Kreiraj usera u Supabase Auth
-    const { data: userData, error: userError } =
-      await supabaseAdmin.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: false,
-      });
+    // 2) Kreiraj usera
+    const { data: user, error: signUpError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: false,
+    });
 
-    if (userError || !userData?.user) {
+    if (signUpError) {
       return NextResponse.json(
-        { error: userError?.message || "Failed to create user" },
+        { error: signUpError.message },
         { status: 400 }
       );
     }
 
-    const user = userData.user;
-
-    // 2) Generiraj 6‑znamenkasti kod
+    // 3) Generiraj 6‑znamenkasti kod
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // 3) Spremi kod u DB
-    const { error: insertError } = await supabaseAdmin
-      .from("email_verification_codes")
-      .insert({
-        user_id: user.id,
-        code,
-        expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
-      });
-
-    if (insertError) {
-      return NextResponse.json(
-        { error: "Failed to store verification code" },
-        { status: 500 }
-      );
-    }
-
-    // 4) Pozovi Edge Function za slanje emaila
+    // 4) Pozovi Edge Function — koristi ANON KEY
     const sendEmailRes = await fetch(
-      `${process.env.SUPABASE_URL}/functions/v1/send-verification-email`, // FIX #2
+      `${process.env.SUPABASE_URL}/functions/v1/send-verification-email`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`, // ispravno
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         },
         body: JSON.stringify({ email, code }),
       }
@@ -75,10 +57,14 @@ export async function POST(req: Request) {
       );
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(
+      { success: true, userId: user.user.id },
+      { status: 200 }
+    );
+
   } catch (err: any) {
     return NextResponse.json(
-      { error: err.message || "Unexpected error" },
+      { error: err.message },
       { status: 500 }
     );
   }
