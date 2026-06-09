@@ -1,105 +1,155 @@
-"use client";
-
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple } from "react-icons/fa";
 
 export default function RegisterPage() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
-    setMessage("");
-    setLoading(true);
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
-        data: {
-          full_name: fullName,
-        },
-      },
-    });
-
-    if (error) {
-      setErrorMsg(error.message);
-      setLoading(false);
-      return;
-    }
-
-    setMessage("Check your email inbox to confirm your account.");
-    setLoading(false);
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md border border-gray-200">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
 
-        <h1 className="text-3xl font-bold mb-6 text-center">Create Account</h1>
+      <div
+        className="
+        w-full max-w-[360px]
+        rounded-[36px]
+        p-10
+        border border-[#141414]
+        bg-gradient-to-b from-white/5 to-white/[0.02]
+        backdrop-blur-xl
+        shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
+        relative
+      "
+      >
 
-        {errorMsg && <p className="mb-4 text-red-600 text-center">{errorMsg}</p>}
-        {message && <p className="mb-4 text-green-600 text-center">{message}</p>}
+        {/* ABASA - gornji desni kut */}
+        <div className="absolute top-6 right-6 text-white/70 text-xs font-medium tracking-wide">
+          ABASA
+        </div>
 
-        <form onSubmit={handleRegister} className="space-y-5">
+        {/* Create account */}
+        <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
+          Create an account
+        </h1>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-          </div>
+        <div className="flex flex-col items-center gap-[15px]">
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+          {/* Email input */}
+          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
             <input
               type="email"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              placeholder="Email Address"
+              className="
+                w-full h-[24px] px-3 text-sm
+                bg-black text-white
+                border-none
+                rounded-lg
+                focus:outline-none focus:ring-2 focus:ring-white/40
+                placeholder-gray-400
+              "
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+          {/* Password input */}
+          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
             <input
               type="password"
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              placeholder="Password"
+              className="
+                w-full h-[24px] px-3 text-sm
+                bg-black text-white
+                border-none
+                rounded-lg
+                focus:outline-none focus:ring-2 focus:ring-white/40
+                placeholder-gray-400
+              "
             />
           </div>
 
+          {/* Continue with Email */}
           <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
+            className="
+            w-[calc(50%+50px)] h-[48px]
+            rounded-[14px] text-[15px] font-medium
+            bg-white text-black
+            border border-white/20
+            hover:border-white hover:border-[3px]
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center
+            mb-[25px]
+          "
           >
-            {loading ? "Creating account..." : "Register"}
+            Continue with Email
           </button>
 
-        </form>
+          {/* Google */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FcGoogle size={18} />
+            <span>Continue with Google</span>
+          </button>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
+          {/* Apple */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FaApple size={18} className="text-black" />
+            <span>Continue with Apple</span>
+          </button>
+
+          {/* Passkey */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center
+            "
+          >
+            <span>Continue with Passkey</span>
+          </button>
+
+        </div>
+
+        {/* Sign In */}
+        <p className="text-sm text-neutral-500 mt-[100px] text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
+          <a
+            href="/auth/login"
+            className="text-neutral-400 font-medium hover:underline"
+          >
             Sign In
           </a>
         </p>
-
       </div>
+
+      {/* Powered by Copilot */}
+      <div className="mt-6 flex items-center gap-2 opacity-80">
+        <span className="text-[10px] text-white tracking-wide opacity-80">
+          Powered by Copilot
+        </span>
+      </div>
+
     </div>
   );
 }
