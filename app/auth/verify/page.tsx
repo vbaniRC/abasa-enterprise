@@ -62,20 +62,22 @@ export default function VerifyPage() {
         </div>
 
         {/* Verify button */}
-        <button
-          className="
-            w-[calc(50%+50px)] h-[48px] mt-6
-            rounded-[14px] text-[15px] font-medium
-            bg-white text-black
-            border border-white/20
-            hover:border-white hover:border-[3px]
-            hover:bg-neutral-200
-            transition
-            flex items-center justify-center
-          "
-        >
-          Verify Email
-        </button>
+<button
+  className="
+    w-[calc(50%+50px)] h-[48px] mt-[50px]
+    rounded-[14px] text-[15px] font-medium
+    bg-white text-black
+    border border-white/20
+    hover:border-white hover:border-[3px]
+    hover:bg-neutral-200
+    transition
+    flex items-center justify-center
+    mx-auto
+  "
+>
+  Verify Email
+</button>
+
 
         {/* Resend */}
         <p className="text-sm text-neutral-500 mt-6 text-center">
