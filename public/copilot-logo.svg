@@ -1,0 +1,29 @@
+<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#0F172A" />
+  <!-- Outer gradient ring -->
+  <circle cx="32" cy="32" r="22" fill="url(#outerGrad)" />
+  <!-- Inner core -->
+  <circle cx="32" cy="32" r="12" fill="url(#innerGrad)" />
+  <!-- Four orbiting nodes -->
+  <circle cx="18" cy="28" r="4" fill="#A5B4FC" />
+  <circle cx="46" cy="28" r="4" fill="#F9A8D4" />
+  <circle cx="24" cy="44" r="4" fill="#6EE7B7" />
+  <circle cx="40" cy="44" r="4" fill="#FACC15" />
+  <defs>
+    <linearGradient id="outerGrad" x1="12" y1="12" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1D4ED8" />
+      <stop offset="0.5" stop-color="#7C3AED" />
+      <stop offset="1" stop-color="#EC4899" />
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="24" y1="24" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22C55E" />
+      <stop offset="1" stop-color="#0EA5E9" />
+    </linearGradient>
+  </defs>
+</svg>
