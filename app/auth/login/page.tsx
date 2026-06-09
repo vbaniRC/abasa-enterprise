@@ -7,8 +7,8 @@ export default function LoginPage() {
 
       <div
         className="
-        w-full max-w-[360px]   /* smanjeno za ~10% */
-        rounded-[36px]         /* još jače zaobljeni rubovi */
+        w-full max-w-[360px]
+        rounded-[36px]
         p-10
         border border-[#141414]
         bg-gradient-to-b from-white/5 to-white/[0.02]
@@ -30,7 +30,7 @@ export default function LoginPage() {
 
         <div className="flex flex-col items-center gap-[20px]">
 
-          {/* Email wrapper to force true black background */}
+          {/* Email wrapper */}
           <div className="w-1/2 bg-black rounded-lg">
             <input
               type="email"
@@ -49,7 +49,7 @@ export default function LoginPage() {
           {/* Continue with Email */}
           <button
             className="
-            w-1/2 h-[48px] rounded-xl text-sm font-medium
+            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
             bg-white text-black
             hover:bg-neutral-200
             transition
@@ -62,9 +62,9 @@ export default function LoginPage() {
           {/* Google */}
           <button
             className="
-            w-1/2 h-[48px] rounded-xl text-sm font-medium
-            bg-white text-black
-            hover:bg-neutral-200
+            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            bg-[#1A1A1A] text-white
+            hover:bg-[#2A2A2A]
             transition
             flex items-center justify-center gap-2
           "
@@ -76,9 +76,9 @@ export default function LoginPage() {
           {/* Apple */}
           <button
             className="
-            w-1/2 h-[48px] rounded-xl text-sm font-medium
-            bg-white text-black
-            hover:bg-neutral-200
+            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            bg-[#1A1A1A] text-white
+            hover:bg-[#2A2A2A]
             transition
             flex items-center justify-center gap-2
           "
@@ -90,9 +90,9 @@ export default function LoginPage() {
           {/* Passkey */}
           <button
             className="
-            w-1/2 h-[48px] rounded-xl text-sm font-medium
-            bg-white text-black
-            hover:bg-neutral-200
+            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            bg-[#1A1A1A] text-white
+            hover:bg-[#2A2A2A]
             transition
             flex items-center justify-center
           "
