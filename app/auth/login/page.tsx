@@ -127,17 +127,13 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Powered by Copilot + logo */}
-      <div className="mt-6 flex items-center gap-2 opacity-80">
-        <span className="text-[10px] text-white tracking-wide opacity-80">
-          Powered by Copilot
-        </span>
-        <img
-          src="/copilot-logo.svg"
-          alt="Copilot Logo"
-          className="h-4 opacity-90"
-        />
-      </div>
+    {/* Powered by Copilot */}
+<div className="mt-6 flex items-center gap-2 opacity-80">
+  <span className="text-[10px] text-white tracking-wide opacity-80">
+    Powered by Copilot
+  </span>
+</div>
+
     </div>
   );
 }
