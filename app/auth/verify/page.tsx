@@ -1,14 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function VerifyPage() {
-  const [code, setCode] = useState("");
-  const email = "user@example.com"; // OVDJE ubaciš stvarni email iz registra
+  const [digits, setDigits] = useState(["", "", "", "", "", ""]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [resendTimer, setResendTimer] = useState(30);
 
-  const handleChange = (e: any) => {
-    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-    setCode(value);
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+
+  const email = "user@example.com"; // OVDJE ubaciš stvarni email
+
+  // Resend timer
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [resendTimer]);
+
+  // Auto-submit when all digits filled
+  useEffect(() => {
+    if (digits.every((d) => d !== "")) {
+      handleVerify();
+    }
+  }, [digits]);
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newDigits = [...digits];
+    newDigits[index] = value;
+    setDigits(newDigits);
+
+    if (value && index < 5) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index: number, e: any) => {
+    if (e.key === "Backspace" && digits[index] === "" && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
+  };
+
+  const handleVerify = () => {
+    setLoading(true);
+    setError("");
+
+    setTimeout(() => {
+      const code = digits.join("");
+
+      if (code !== "123456") {
+        setError("Krivi verifikacijski kod");
+        setLoading(false);
+        return;
+      }
+
+      // uspješna verifikacija
+      console.log("Verified!");
+    }, 1200);
+  };
+
+  const handleResend = () => {
+    if (resendTimer > 0) return;
+    setResendTimer(30);
+    setDigits(["", "", "", "", "", ""]);
+    inputsRef.current[0]?.focus();
   };
 
   return (
@@ -43,47 +101,73 @@ export default function VerifyPage() {
           <span className="text-white font-medium">{email}</span>
         </p>
 
-        {/* Verification code input */}
-        <div className="w-[calc(50%+50px)] mx-auto">
-          <input
-            type="text"
-            value={code}
-            onChange={handleChange}
-            placeholder="••••••"
-            className="
-              w-full h-[48px] text-center text-xl tracking-[10px]
-              bg-black text-white
-              border border-white/20
-              rounded-[14px]
-              focus:outline-none focus:ring-2 focus:ring-white/40
-              placeholder-white/20
-            "
-          />
+        {/* 6-digit input */}
+        <div className="flex justify-center gap-2">
+          {digits.map((digit, index) => (
+            <input
+              key={index}
+              ref={(el) => (inputsRef.current[index] = el)}
+              type="text"
+              maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              className={`
+                w-10 h-12 text-center text-xl
+                bg-black text-white
+                border rounded-[12px]
+                focus:outline-none focus:ring-2 focus:ring-white/40
+                ${error ? "border-red-500" : "border-white/20"}
+              `}
+            />
+          ))}
         </div>
 
-        {/* Verify button */}
-<button
-  className="
-    w-[calc(50%+50px)] h-[48px] mt-[50px]
-    rounded-[14px] text-[15px] font-medium
-    bg-white text-black
-    border border-white/20
-    hover:border-white hover:border-[3px]
-    hover:bg-neutral-200
-    transition
-    flex items-center justify-center
-    mx-auto
-  "
->
-  Verify Email
-</button>
+        {/* Error message */}
+        {error && (
+          <p className="text-red-500 text-xs text-center mt-3">
+            {error}
+          </p>
+        )}
 
+        {/* Verify button */}
+        <button
+          onClick={handleVerify}
+          disabled={loading}
+          className="
+            w-[calc(50%+50px)] h-[48px] mt-[50px]
+            rounded-[14px] text-[15px] font-medium
+            bg-white text-black
+            border border-white/20
+            hover:border-white hover:border-[3px]
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center
+            mx-auto
+            disabled:opacity-50
+          "
+        >
+          {loading ? (
+            <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+          ) : (
+            "Verify Email"
+          )}
+        </button>
 
         {/* Resend */}
         <p className="text-sm text-neutral-500 mt-6 text-center">
           Niste dobili kod?{" "}
-          <span className="text-neutral-300 font-medium hover:underline cursor-pointer">
-            Pošalji ponovo
+          <span
+            onClick={handleResend}
+            className={`font-medium cursor-pointer ${
+              resendTimer > 0
+                ? "text-neutral-600"
+                : "text-neutral-300 hover:underline"
+            }`}
+          >
+            {resendTimer > 0
+              ? `Pošalji ponovo za ${resendTimer}s`
+              : "Pošalji ponovo"}
           </span>
         </p>
       </div>
