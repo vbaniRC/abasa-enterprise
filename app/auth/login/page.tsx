@@ -61,49 +61,49 @@ export default function LoginPage() {
             Continue with Email
           </button>
 
-          {/* Google */}
-          <button
-            className="
-            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-            bg-[#1A1A1A] text-white
-            border border-white/20
-            hover:border-white
-            transition
-            flex items-center justify-center gap-2
-          "
-          >
-            <FcGoogle size={18} />
-            <span>Continue with Google</span>
-          </button>
+        {/* Google */}
+<button
+  className="
+    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] text-white
+    border border-white/20
+    hover:border-white
+    transition
+    flex items-center justify-center gap-2
+  "
+>
+  <FcGoogle size={18} />
+  <span className="text-white">Continue with Google</span>
+</button>
 
-          {/* Apple */}
-          <button
-            className="
-            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-            bg-[#1A1A1A] text-white
-            border border-white/20
-            hover:border-white
-            transition
-            flex items-center justify-center gap-2
-          "
-          >
-            <FaApple size={18} />
-            <span>Continue with Apple</span>
-          </button>
+{/* Apple */}
+<button
+  className="
+    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] text-white
+    border border-white/20
+    hover:border-white
+    transition
+    flex items-center justify-center gap-2
+  "
+>
+  <FaApple size={18} />
+  <span className="text-white">Continue with Apple</span>
+</button>
 
-          {/* Passkey */}
-          <button
-            className="
-            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-            bg-[#1A1A1A] text-white
-            border border-white/20
-            hover:border-white
-            transition
-            flex items-center justify-center
-          "
-          >
-            Continue with Passkey
-          </button>
+{/* Passkey */}
+<button
+  className="
+    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] text-white
+    border border-white/20
+    hover:border-white
+    transition
+    flex items-center justify-center
+  "
+>
+  <span className="text-white">Continue with Passkey</span>
+</button>
 
           {/* Show other options */}
           <button className="text-sm text-neutral-400 hover:underline mt-1">
