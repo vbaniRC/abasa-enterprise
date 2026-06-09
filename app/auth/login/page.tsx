@@ -50,10 +50,11 @@ export default function LoginPage() {
           <button
             className="
             w-[calc(50%+50px)] h-[48px]
-            rounded-2xl text-[15px] font-medium
+            rounded-[14px] text-[15px] font-medium
             bg-white text-black
             border border-white/20
-            hover:bg-neutral-200 hover:border-white
+            hover:border-white hover:border-[3px]
+            hover:bg-neutral-200
             transition
             flex items-center justify-center
             mb-[25px]
@@ -66,10 +67,11 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-2xl text-[15px] font-medium
+              rounded-[14px] text-[15px] font-medium
               bg-[rgb(145,145,145)] text-black
-              border-0
-              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
               transition
               flex items-center justify-center gap-2
             "
@@ -82,10 +84,11 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-2xl text-[15px] font-medium
+              rounded-[14px] text-[15px] font-medium
               bg-[rgb(145,145,145)] text-black
-              border-0
-              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
               transition
               flex items-center justify-center gap-2
             "
@@ -98,10 +101,11 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-2xl text-[15px] font-medium
+              rounded-[14px] text-[15px] font-medium
               bg-[rgb(145,145,145)] text-black
-              border-0
-              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
               transition
               flex items-center justify-center
             "
