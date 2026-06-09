@@ -99,4 +99,120 @@ export default function RegisterPage() {
           <div
             className={`
               w-[calc(50%+50px)] bg-black rounded-lg border
-              ${confirm.length > 0 && !passwordsMatch ? "border
+              ${confirm.length > 0 && !passwordsMatch ? "border-red-500" : "border-white/20"}
+            `}
+          >
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Confirm your Password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className="
+                w-full h-[24px] px-3 text-sm
+                bg-black text-white
+                border-none
+                rounded-lg
+                focus:outline-none focus:ring-2 focus:ring-white/40
+                placeholder-gray-400
+              "
+            />
+          </div>
+
+          {/* Password mismatch message */}
+          {confirm.length > 0 && !passwordsMatch && (
+            <p className="text-red-500 text-xs w-[calc(50%+50px)] text-left">
+              Passwords do not match
+            </p>
+          )}
+
+          {/* Continue with Email */}
+          <button
+            className="
+            w-[calc(50%+50px)] h-[48px]
+            rounded-[14px] text-[15px] font-medium
+            bg-white text-black
+            border border-white/20
+            hover:border-white hover:border-[3px]
+            hover:bg-neutral-200
+            transition
+            flex items-center justify-center
+            mb-[25px]
+          "
+          >
+            Continue with Email
+          </button>
+
+          {/* Google */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FcGoogle size={18} />
+            <span>Continue with Google</span>
+          </button>
+
+          {/* Apple */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FaApple size={18} className="text-black" />
+            <span>Continue with Apple</span>
+          </button>
+
+          {/* Passkey */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
+              border border-transparent
+              hover:bg-[rgb(220,220,220)]
+              hover:border-white hover:border-[3px]
+              transition
+              flex items-center justify-center
+            "
+          >
+            <span>Continue with Passkey</span>
+          </button>
+
+        </div>
+
+        {/* Sign In */}
+        <p className="text-sm text-neutral-500 mt-[100px] text-center">
+          Already have an account?{" "}
+          <a
+            href="/auth/login"
+            className="text-neutral-400 font-medium hover:underline"
+          >
+            Sign In
+          </a>
+        </p>
+      </div>
+
+      {/* Powered by Copilot */}
+      <div className="mt-6 flex items-center gap-2 opacity-80">
+        <span className="text-[10px] text-white tracking-wide opacity-80">
+          Powered by Copilot
+        </span>
+      </div>
+
+    </div>
+  );
+}
