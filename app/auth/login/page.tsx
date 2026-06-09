@@ -28,20 +28,20 @@ export default function LoginPage() {
           Log in
         </h1>
 
-        <div className="flex flex-col items-center gap-[40px]">
+        <div className="flex flex-col items-center gap-[15px]">
 
           {/* Email wrapper */}
-          <div className="w-[calc(50%+50px)] bg-black rounded-lg">
+          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
             <input
               type="email"
               placeholder="Email Address"
               className="
                 w-full h-[24px] px-3 text-sm
                 bg-black text-white
-                border border-white/10
+                border-none
                 rounded-lg
                 focus:outline-none focus:ring-2 focus:ring-white/40
-                placeholder-white/40
+                placeholder-gray-400
               "
             />
           </div>
@@ -51,9 +51,11 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
             bg-white text-black
-            hover:bg-neutral-200
+            border border-white/20
+            hover:border-white
             transition
             flex items-center justify-center
+            mb-[25px] /* ovo + gap daje ukupno 40px razmaka */
           "
           >
             Continue with Email
@@ -64,7 +66,8 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            border border-white/20
+            hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -78,7 +81,8 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            border border-white/20
+            hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -92,7 +96,8 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white
+            border border-white/20
+            hover:border-white
             transition
             flex items-center justify-center
           "
