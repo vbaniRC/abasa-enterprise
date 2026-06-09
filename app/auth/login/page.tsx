@@ -109,7 +109,6 @@ export default function LoginPage() {
   <span>Continue with Passkey</span>
 </button>
 
-
           {/* Show other options */}
           <button className="text-sm text-neutral-400 hover:underline mt-1">
             Show other options
