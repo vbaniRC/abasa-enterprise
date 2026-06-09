@@ -101,27 +101,27 @@ export default function VerifyPage() {
           <span className="text-white font-medium">{email}</span>
         </p>
 
-        {/* 6-digit input */}
-        <div className="flex justify-center gap-2">
-          {digits.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => (inputsRef.current[index] = el)}
-              type="text"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              className={`
-                w-10 h-12 text-center text-xl
-                bg-black text-white
-                border rounded-[12px]
-                focus:outline-none focus:ring-2 focus:ring-white/40
-                ${error ? "border-red-500" : "border-white/20"}
-              `}
-            />
-          ))}
-        </div>
+       <div className="flex justify-center gap-3">
+  {digits.map((digit, index) => (
+    <input
+      key={index}
+      ref={(el) => (inputsRef.current[index] = el)}
+      type="text"
+      maxLength={1}
+      value={digit}
+      onChange={(e) => handleChange(index, e.target.value)}
+      onKeyDown={(e) => handleKeyDown(index, e)}
+      className={`
+        w-[42px] h-[60px] text-center text-[26px]
+        bg-black text-white
+        border rounded-[16px]
+        focus:outline-none focus:ring-2 focus:ring-white/40
+        ${error ? "border-red-500" : "border-white/20"}
+      `}
+    />
+  ))}
+</div>
+
 
         {/* Error message */}
         {error && (
