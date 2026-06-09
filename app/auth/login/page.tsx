@@ -119,7 +119,7 @@ export default function LoginPage() {
       </div>
 
       {/* Powered by Copilot */}
-      <div className="mt-6 text-[10px] text-neutral-600 tracking-wide">
+      <div className="mt-6 text-[10px] text-white tracking-wide opacity-60">
         Powered by Copilot
       </div>
     </div>
