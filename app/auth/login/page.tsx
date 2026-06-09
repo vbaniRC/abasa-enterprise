@@ -61,14 +61,13 @@ export default function LoginPage() {
             Continue with Email
           </button>
 
-        {/* Google */}
+     {/* Google */}
 <button
   className="
-    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] text-white
-    border border-white/20
-    hover:border-white
-    transition
+    w-[calc(50%+50px)] h-[48px]
+    rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] border border-white/20
+    hover:border-white transition
     flex items-center justify-center gap-2
   "
 >
@@ -79,26 +78,24 @@ export default function LoginPage() {
 {/* Apple */}
 <button
   className="
-    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] text-white
-    border border-white/20
-    hover:border-white
-    transition
+    w-[calc(50%+50px)] h-[48px]
+    rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] border border-white/20
+    hover:border-white transition
     flex items-center justify-center gap-2
   "
 >
-  <FaApple size={18} />
+  <FaApple size={18} className="text-white" />
   <span className="text-white">Continue with Apple</span>
 </button>
 
 {/* Passkey */}
 <button
   className="
-    w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] text-white
-    border border-white/20
-    hover:border-white
-    transition
+    w-[calc(50%+50px)] h-[48px]
+    rounded-2xl text-[15px] font-medium
+    bg-[#1A1A1A] border border-white/20
+    hover:border-white transition
     flex items-center justify-center
   "
 >
