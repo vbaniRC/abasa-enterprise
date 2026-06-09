@@ -49,70 +49,66 @@ export default function LoginPage() {
           {/* Continue with Email */}
           <button
             className="
-            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            w-[calc(50%+50px)] h-[48px]
+            rounded-xl text-[15px] font-medium
             bg-white text-black
             border border-white/20
-            hover:border-white
+            hover:bg-neutral-200 hover:border-white
             transition
             flex items-center justify-center
-            mb-[25px] /* ovo + gap daje ukupno 40px razmaka */
+            mb-[25px] /* daje ukupno 40px razmaka do Google gumba */
           "
           >
             Continue with Email
           </button>
 
-     {/* Google */}
-{/* Google */}
-<button
-  className="
-    w-[calc(50%+50px)] h-[48px]
-    rounded-full text-[15px] font-medium
-    bg-[#E5E5E5] text-black
-    border border-white/20
-    hover:bg-[#F0F0F0] hover:border-white
-    transition
-    flex items-center justify-center gap-2
-  "
->
-  <FcGoogle size={18} />
-  <span>Continue with Google</span>
-</button>
-
-{/* Apple */}
-<button
-  className="
-    w-[calc(50%+50px)] h-[48px]
-    rounded-full text-[15px] font-medium
-    bg-[#E5E5E5] text-black
-    border border-white/20
-    hover:bg-[#F0F0F0] hover:border-white
-    transition
-    flex items-center justify-center gap-2
-  "
->
-  <FaApple size={18} className="text-black" />
-  <span>Continue with Apple</span>
-</button>
-
-{/* Passkey */}
-<button
-  className="
-    w-[calc(50%+50px)] h-[48px]
-    rounded-full text-[15px] font-medium
-    bg-[#E5E5E5] text-black
-    border border-white/20
-    hover:bg-[#F0F0F0] hover:border-white
-    transition
-    flex items-center justify-center
-  "
->
-  <span>Continue with Passkey</span>
-</button>
-
-          {/* Show other options */}
-          <button className="text-sm text-neutral-400 hover:underline mt-1">
-            Show other options
+          {/* Google */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-xl text-[15px] font-medium
+              bg-[rgb(180,180,180)] text-black
+              border-0
+              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FcGoogle size={18} />
+            <span>Continue with Google</span>
           </button>
+
+          {/* Apple */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-xl text-[15px] font-medium
+              bg-[rgb(180,180,180)] text-black
+              border-0
+              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              transition
+              flex items-center justify-center gap-2
+            "
+          >
+            <FaApple size={18} className="text-black" />
+            <span>Continue with Apple</span>
+          </button>
+
+          {/* Passkey */}
+          <button
+            className="
+              w-[calc(50%+50px)] h-[48px]
+              rounded-xl text-[15px] font-medium
+              bg-[rgb(180,180,180)] text-black
+              border-0
+              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              transition
+              flex items-center justify-center
+            "
+          >
+            <span>Continue with Passkey</span>
+          </button>
+
         </div>
 
         {/* Sign Up link — spušteno 100px */}
