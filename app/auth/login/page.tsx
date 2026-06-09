@@ -31,12 +31,12 @@ export default function LoginPage() {
         <div className="flex flex-col items-center gap-[20px]">
 
           {/* Email wrapper */}
-          <div className="w-1/2 bg-black rounded-lg">
+          <div className="w-[calc(50%+50px)] bg-black rounded-lg">
             <input
               type="email"
               placeholder="Email Address"
               className="
-                w-full h-[52px] px-3 text-sm
+                w-full h-[26px] px-3 text-sm
                 bg-black text-white
                 border border-white/10
                 rounded-lg
@@ -62,9 +62,9 @@ export default function LoginPage() {
           {/* Google */}
           <button
             className="
-            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:bg-[#2A2A2A]
+            hover:border hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -76,9 +76,9 @@ export default function LoginPage() {
           {/* Apple */}
           <button
             className="
-            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:bg-[#2A2A2A]
+            hover:border hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -90,9 +90,9 @@ export default function LoginPage() {
           {/* Passkey */}
           <button
             className="
-            w-[calc(50%+50px)] h-[48px] rounded-xl text-[15px] font-medium
+            w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:bg-[#2A2A2A]
+            hover:border hover:border-white
             transition
             flex items-center justify-center
           "
