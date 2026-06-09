@@ -23,14 +23,14 @@ export default function LoginPage() {
           ABASA
         </div>
 
-        {/* Log in - centrirano */}
+        {/* Log in */}
         <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
           Log in
         </h1>
 
         <div className="flex flex-col items-center gap-[15px]">
 
-          {/* Email wrapper */}
+          {/* Email input */}
           <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
             <input
               type="email"
@@ -50,13 +50,13 @@ export default function LoginPage() {
           <button
             className="
             w-[calc(50%+50px)] h-[48px]
-            rounded-xl text-[15px] font-medium
+            rounded-full text-[15px] font-medium
             bg-white text-black
             border border-white/20
             hover:bg-neutral-200 hover:border-white
             transition
             flex items-center justify-center
-            mb-[25px] /* daje ukupno 40px razmaka do Google gumba */
+            mb-[25px]
           "
           >
             Continue with Email
@@ -66,10 +66,10 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-xl text-[15px] font-medium
-              bg-[rgb(180,180,180)] text-black
+              rounded-full text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
               border-0
-              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
               transition
               flex items-center justify-center gap-2
             "
@@ -82,10 +82,10 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-xl text-[15px] font-medium
-              bg-[rgb(180,180,180)] text-black
+              rounded-full text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
               border-0
-              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
               transition
               flex items-center justify-center gap-2
             "
@@ -98,10 +98,10 @@ export default function LoginPage() {
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
-              rounded-xl text-[15px] font-medium
-              bg-[rgb(180,180,180)] text-black
+              rounded-full text-[15px] font-medium
+              bg-[rgb(145,145,145)] text-black
               border-0
-              hover:bg-[rgb(240,240,240)] hover:border-[3px] hover:border-white
+              hover:bg-[rgb(220,220,220)] hover:border-[3px] hover:border-white
               transition
               flex items-center justify-center
             "
@@ -111,7 +111,7 @@ export default function LoginPage() {
 
         </div>
 
-        {/* Sign Up link — spušteno 100px */}
+        {/* Sign Up */}
         <p className="text-sm text-neutral-500 mt-[100px] text-center">
           Don’t have an account?{" "}
           <a
@@ -123,9 +123,16 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Powered by Copilot */}
-      <div className="mt-6 text-[10px] text-white tracking-wide opacity-60">
-        Powered by Copilot
+      {/* Powered by Copilot + logo */}
+      <div className="mt-6 flex items-center gap-2 opacity-80">
+        <span className="text-[10px] text-white tracking-wide opacity-80">
+          Powered by Copilot
+        </span>
+        <img
+          src="/copilot-logo.png"
+          alt="Copilot Logo"
+          className="h-4 opacity-90"
+        />
       </div>
     </div>
   );
