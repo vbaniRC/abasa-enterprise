@@ -28,7 +28,7 @@ export default function LoginPage() {
           Log in
         </h1>
 
-        <div className="flex flex-col items-center gap-[20px]">
+        <div className="flex flex-col items-center gap-[40px]">
 
           {/* Email wrapper */}
           <div className="w-[calc(50%+50px)] bg-black rounded-lg">
@@ -64,7 +64,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
+            hover:border hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -78,7 +78,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
+            hover:border hover:border-white
             transition
             flex items-center justify-center gap-2
           "
@@ -92,7 +92,7 @@ export default function LoginPage() {
             className="
             w-[calc(50%+50px)] h-[48px] rounded-2xl text-[15px] font-medium
             bg-[#1A1A1A] text-white
-            hover:border hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.25)]
+            hover:border hover:border-white
             transition
             flex items-center justify-center
           "
