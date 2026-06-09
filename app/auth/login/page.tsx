@@ -62,45 +62,53 @@ export default function LoginPage() {
           </button>
 
      {/* Google */}
+{/* Google */}
 <button
   className="
     w-[calc(50%+50px)] h-[48px]
-    rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] border border-white/20
-    hover:border-white transition
+    rounded-full text-[15px] font-medium
+    bg-[#E5E5E5] text-black
+    border border-white/20
+    hover:bg-[#F0F0F0] hover:border-white
+    transition
     flex items-center justify-center gap-2
   "
 >
   <FcGoogle size={18} />
-  <span className="text-white">Continue with Google</span>
+  <span>Continue with Google</span>
 </button>
 
 {/* Apple */}
 <button
   className="
     w-[calc(50%+50px)] h-[48px]
-    rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] border border-white/20
-    hover:border-white transition
+    rounded-full text-[15px] font-medium
+    bg-[#E5E5E5] text-black
+    border border-white/20
+    hover:bg-[#F0F0F0] hover:border-white
+    transition
     flex items-center justify-center gap-2
   "
 >
-  <FaApple size={18} className="text-white" />
-  <span className="text-white">Continue with Apple</span>
+  <FaApple size={18} className="text-black" />
+  <span>Continue with Apple</span>
 </button>
 
 {/* Passkey */}
 <button
   className="
     w-[calc(50%+50px)] h-[48px]
-    rounded-2xl text-[15px] font-medium
-    bg-[#1A1A1A] border border-white/20
-    hover:border-white transition
+    rounded-full text-[15px] font-medium
+    bg-[#E5E5E5] text-black
+    border border-white/20
+    hover:bg-[#F0F0F0] hover:border-white
+    transition
     flex items-center justify-center
   "
 >
-  <span className="text-white">Continue with Passkey</span>
+  <span>Continue with Passkey</span>
 </button>
+
 
           {/* Show other options */}
           <button className="text-sm text-neutral-400 hover:underline mt-1">
