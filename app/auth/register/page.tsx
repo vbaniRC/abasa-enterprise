@@ -212,7 +212,7 @@ export default function RegisterPage() {
       {/* Powered by Copilot */}
       <div className="mt-6 flex items-center gap-2 opacity-80">
         <span className="text-[10px] text-white tracking-wide opacity-80">
-          Powered by Copilot
+          Powered by ABASA and Copilot
         </span>
       </div>
 
