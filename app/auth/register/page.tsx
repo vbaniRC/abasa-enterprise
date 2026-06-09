@@ -4,8 +4,12 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +22,11 @@ export default function RegisterPage() {
   })();
 
   const passwordsMatch = confirm.length > 0 && password === confirm;
+
+  const handleContinue = () => {
+    if (!email) return;
+    router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
@@ -52,6 +61,8 @@ export default function RegisterPage() {
             <input
               type="email"
               placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="
                 w-full h-[24px] px-3 text-sm
                 bg-black text-white
@@ -130,6 +141,7 @@ export default function RegisterPage() {
 
           {/* Continue with Email */}
           <button
+            onClick={handleContinue}
             className="
             w-[calc(50%+50px)] h-[48px]
             rounded-[14px] text-[15px] font-medium
@@ -212,7 +224,7 @@ export default function RegisterPage() {
       {/* Powered by Copilot */}
       <div className="mt-6 flex items-center gap-2 opacity-80">
         <span className="text-[10px] text-white tracking-wide opacity-80">
-          Powered by ABASA and Copilot
+          Powered by Copilot
         </span>
       </div>
 
