@@ -130,16 +130,18 @@ export default function VerifyPage() {
         </div>
 
         <button
-          className="
-            w-full py-[13px]
-            bg-white text-black
-            rounded-xl font-semibold
-            hover:bg-gray-200 transition
-            flex items-center justify-center
-            mb-[20px]
-          "
-          onClick={() => submitCode(digits.join(""))}
-        >
+  className="
+    w-1/2 py-[13px]
+    bg-white text-black
+    rounded-xl font-semibold
+    hover:bg-gray-200 transition
+    flex items-center justify-center
+    mb-[20px]
+    mx-auto
+  "
+  onClick={() => submitCode(digits.join(""))}
+>
+
           {loading ? (
             <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
           ) : success ? (
