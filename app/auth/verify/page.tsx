@@ -56,4 +56,11 @@ export default function VerifyPage() {
       </div>
 
       <button
-        className
+        className="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition"
+        onClick={() => console.log("Submitting code:", code.join(""))}
+      >
+        Verify
+      </button>
+    </div>
+  );
+}
