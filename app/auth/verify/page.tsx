@@ -11,7 +11,6 @@ export default function VerifyPage() {
 
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-  // TIMER
   useEffect(() => {
     if (timer <= 0) return;
     const interval = setInterval(() => setTimer((t) => t - 1), 1000);
@@ -44,7 +43,7 @@ export default function VerifyPage() {
     setLoading(true);
 
     setTimeout(() => {
-      const isValid = false; // backend placeholder
+      const isValid = false;
 
       if (!isValid) {
         setLoading(false);
@@ -66,25 +65,24 @@ export default function VerifyPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen bg-black text-white pt-[100px]">
+    <div className="flex flex-col items-center justify-start min-h-screen bg-black text-white pt-[150px]">
 
       {/* ABASA title */}
-      <div className="text-4xl font-bold mb-10 tracking-wide">
+      <div className="text-4xl font-bold mb-[10px] tracking-wide">
         ABASA
       </div>
 
       {/* CARD */}
       <div
         className={`
-          rounded-2xl p-8
-          border border-white/10
+          rounded-[20px] p-8
           shadow-[0_0_40px_rgba(255,255,255,0.08)]
           backdrop-blur-xl
           bg-[rgba(20,20,20,0.55)]
           transition-all duration-300
           animate-fade-in
           ${error ? "animate-shake" : ""}
-          ${success ? "shadow-[0_0_40px_rgba(0,255,120,0.5)] border-green-400" : ""}
+          ${success ? "shadow-[0_0_40px_rgba(0,255,120,0.5)]" : ""}
         `}
         style={{
           width: "fit-content",
@@ -129,7 +127,7 @@ export default function VerifyPage() {
 
         <button
           className="
-            w-full py-3
+            w-full py-[13px]
             bg-white text-black
             rounded-xl font-semibold
             hover:bg-gray-200 transition
@@ -160,7 +158,7 @@ export default function VerifyPage() {
           )}
         </div>
 
-        <div className="text-center text-xs text-white/40">
+        <div className="text-center text-xs text-white/40" style={{ fontSize: "80%" }}>
           Powered by Copilot
         </div>
       </div>
