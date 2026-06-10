@@ -64,21 +64,7 @@ export default function LoginPage() {
           </button>
 
           {/* Google */}
-          <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center gap-2
-            "
-          >
-            <FcGoogle size={18} />
-            <span>Continue with Google</span>
-          </button>
+         
 
            {/* Google */}
           <button
