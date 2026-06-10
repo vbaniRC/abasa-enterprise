@@ -43,9 +43,8 @@ export default function VerifyPage() {
   const submitCode = async (code: string) => {
     setLoading(true);
 
-    // simulate API
     setTimeout(() => {
-      const isValid = false; // change when backend ready
+      const isValid = false; // backend placeholder
 
       if (!isValid) {
         setLoading(false);
@@ -56,9 +55,6 @@ export default function VerifyPage() {
 
       setLoading(false);
       setSuccess(true);
-      setTimeout(() => {
-        // redirect or continue
-      }, 1200);
     }, 1200);
   };
 
@@ -70,25 +66,37 @@ export default function VerifyPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black text-white px-4">
+    <div className="flex flex-col items-center justify-start min-h-screen bg-black text-white pt-[100px]">
+
+      {/* ABASA title */}
+      <div className="text-4xl font-bold mb-10 tracking-wide">
+        ABASA
+      </div>
+
+      {/* CARD */}
       <div
         className={`
-          w-full max-w-md
           rounded-2xl p-8
           border border-white/10
           shadow-[0_0_40px_rgba(255,255,255,0.08)]
           backdrop-blur-xl
           bg-[rgba(20,20,20,0.55)]
           transition-all duration-300
+          animate-fade-in
           ${error ? "animate-shake" : ""}
           ${success ? "shadow-[0_0_40px_rgba(0,255,120,0.5)] border-green-400" : ""}
         `}
+        style={{
+          width: "fit-content",
+          paddingLeft: "50px",
+          paddingRight: "50px",
+        }}
       >
-        <h1 className="text-2xl font-semibold text-center mb-6 animate-fade-in">
+        <h1 className="text-2xl font-semibold text-center mb-6">
           Enter Verification Code
         </h1>
 
-        <div className="flex justify-center animate-fade-in-slow">
+        <div className="flex justify-center mb-[20px]">
           {digits.map((digit, index) => (
             <input
               key={index}
@@ -121,11 +129,12 @@ export default function VerifyPage() {
 
         <button
           className="
-            w-full mt-8 py-3
+            w-full py-3
             bg-white text-black
             rounded-xl font-semibold
             hover:bg-gray-200 transition
             flex items-center justify-center
+            mb-[20px]
           "
           onClick={() => submitCode(digits.join(""))}
         >
@@ -138,7 +147,7 @@ export default function VerifyPage() {
           )}
         </button>
 
-        <div className="text-center mt-6 text-sm text-white/70">
+        <div className="text-center text-sm text-white/70 mb-[200px]">
           {timer > 0 ? (
             <span>Resend code in {timer}s</span>
           ) : (
@@ -150,14 +159,15 @@ export default function VerifyPage() {
             </button>
           )}
         </div>
+
+        <div className="text-center text-xs text-white/40">
+          Powered by Copilot
+        </div>
       </div>
 
       <style jsx>{`
         .animate-fade-in {
           animation: fadeIn 0.6s ease forwards;
-        }
-        .animate-fade-in-slow {
-          animation: fadeIn 1s ease forwards;
         }
         .animate-shake {
           animation: shake 0.4s ease;
