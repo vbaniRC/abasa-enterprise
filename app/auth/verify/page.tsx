@@ -68,10 +68,14 @@ export default function VerifyPage() {
     <div className="flex flex-col items-center justify-start min-h-screen bg-black text-white pt-[150px]">
 
       {/* ABASA title */}
-      <div className="text-4xl font-bold mb-[10px] tracking-wide">
-        ABASA
-      </div>
+<div className="text-4xl font-bold tracking-wide mb-[10px]">
+  ABASA
+</div>
 
+<div className="text-center text-white/70 text-sm mb-[30px] max-w-[320px] leading-relaxed">
+  We’ve sent an email containing your verification code.  
+  Please check your inbox and enter the code below.
+</div>
       {/* CARD */}
       <div
         className={`
