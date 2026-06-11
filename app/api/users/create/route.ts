@@ -2,35 +2,36 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { email, password, role, clubId } = body;
+  try {
+    const body = await req.json();
+    const { email, password, role } = body;
 
-  // AUTH
-  //await requireAuth(req as any, NextResponse);
+    // Insert user into Supabase
+    const { data, error } = await supabase
+      .from("users")
+      .insert({
+        email,
+        password,
+        role,
+      })
+      .select()
+      .single();
 
-  // ROLE → owner, admin, superadmin
- 
-  // Kreiraj usera u Supabase
-  const user = (req as any).user;
+    if (error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
 
-
-  if (error) {
     return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
+      { success: true, user: data },
+      { status: 201 }
+    );
+  } catch (err: any) {
+    return NextResponse.json(
+      { error: err.message || "Unexpected server error" },
+      { status: 500 }
     );
   }
-
-  // Spremi u users tablicu
-  await supabase.from("users").insert({
-    auth_id: user.user?.id,
-    email,
-    role,
-    club_id: clubId,
-  });
-
-  return NextResponse.json({
-    message: "User created successfully",
-    user: user.user,
-  });
 }
