@@ -11,3 +11,5 @@
 
 ## Cilj
 Stvoriti stabilnu, minimalnu i čistu osnovu bez viškova, spremnu za integraciju postojećeg koda.
+
+ABASA Club management
