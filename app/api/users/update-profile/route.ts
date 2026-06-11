@@ -1,34 +1,40 @@
 import { NextResponse } from "next/server";
-
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
-  // AUTH
-  await requireAuth(req as any, NextResponse);
+  try {
+    const body = await req.json();
+    const { user_id, club_id } = body;
 
-  const user = { club_id: null };
+    if (!user_id) {
+      return NextResponse.json(
+        { error: "Missing user_id" },
+        { status: 400 }
+      );
+    }
 
-  const body = await req.json();
+    const { data, error } = await supabase
+      .from("users")
+      .update({ club_id })
+      .eq("id", user_id)
+      .select()
+      .single();
 
-  const { name, phone, address } = body;
+    if (error) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
 
-  const { error } = await supabase
-    .from("users")
-    .update({
-      name,
-      phone,
-      address,
-    })
-    .eq("auth_id", user.auth_id);
-
-  if (error) {
     return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
+      { success: true, user: data },
+      { status: 200 }
+    );
+  } catch (err: any) {
+    return NextResponse.json(
+      { error: err.message || "Unexpected server error" },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json({
-    message: "Profile updated successfully",
-  });
 }
