@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
-
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 import { useSearchParams } from "next/navigation";
 
@@ -11,7 +12,6 @@ export default function VerifyPage() {
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
 
-      {/* HEADER */}
       <header className="absolute top-0 left-0 px-8 py-6 z-30">
         <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
         <p className="text-sm text-white opacity-90 drop-shadow">
@@ -19,7 +19,6 @@ export default function VerifyPage() {
         </p>
       </header>
 
-      {/* CARD */}
       <div
         className="
           fade-in
@@ -54,13 +53,12 @@ export default function VerifyPage() {
         </p>
 
         <p className="text-neutral-500 text-xs mt-10">
-          Didn’t receive the email?  
+          Didn’t receive the email?
           <br />
           Check your spam folder or try again later.
         </p>
       </div>
 
-      {/* FOOTER */}
       <div className="absolute bottom-6 flex items-center gap-2 opacity-80 z-20">
         <span className="text-[10px] text-white tracking-wide opacity-80">
           Powered by Copilot
