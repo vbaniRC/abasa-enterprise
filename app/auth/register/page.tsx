@@ -1,10 +1,33 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+
+  async function handleRegister() {
+    if (!email) return;
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+      console.error("Registration failed");
+      return;
+    }
+
+    router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+  }
+
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
-
       {/* HEADER – gornji lijevi kut */}
       <header className="absolute top-0 left-0 px-8 py-6 z-30">
         <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
@@ -21,26 +44,26 @@ export default function RegisterPage() {
           rounded-[36px]
           p-10
           border border-[#141414]
-          bg-gradient-to-b from-white/5 to-white/[0.02]
+          bg-gradient-to-b from white/5 to-white/[0.02]
           backdrop-blur-xl
           shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
           relative
           z-20
         "
       >
-
         {/* Title */}
         <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
           Create an account
         </h1>
 
         <div className="flex flex-col items-center gap-[15px]">
-
           {/* Email input */}
           <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
             <input
               type="email"
               placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="
                 w-full h-[24px] px-3 text-sm
                 bg-black text-white
@@ -54,6 +77,7 @@ export default function RegisterPage() {
 
           {/* Continue with Email */}
           <button
+            onClick={handleRegister}
             className="
               w-[calc(50%+50px)] h-[48px]
               rounded-[14px] text-[15px] font-medium
@@ -118,7 +142,6 @@ export default function RegisterPage() {
           >
             <span>Continue with Passkey</span>
           </button>
-
         </div>
 
         {/* Log in */}
@@ -139,7 +162,6 @@ export default function RegisterPage() {
           Powered by Copilot
         </span>
       </div>
-
     </div>
   );
 }
