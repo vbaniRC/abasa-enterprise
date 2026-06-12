@@ -1,16 +1,50 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-//import { requireAuth } from "@/lib/middleware/auth";
-import { supabase } from "@/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
 
 export async function GET(req: Request) {
-  // Placeholder auth – samo pozivamo funkciju, ne provjeravamo ništa
-  //await requireAuth(req as any, NextResponse);
+  const res = NextResponse.json({ success: false });
 
-  // Placeholder user – u pravom authu bi ovo dolazilo iz middleware-a
-  const user = (req as any).user || null;
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.headers
+            .get("cookie")
+            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
+        },
+        set(name, value, options) {
+          res.cookies.set(name, value, options);
+        },
+        remove(name) {
+          res.cookies.delete(name);
+        },
+      },
+    }
+  );
+
+  // AUTH → dohvati usera
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return NextResponse.json({ user: null });
+  }
+
+  // DOHVATI PROFIL
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
   return NextResponse.json({
-    message: "Authenticated",
+    success: true,
     user,
+    profile,
   });
 }

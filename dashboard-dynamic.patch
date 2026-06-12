@@ -1,0 +1,244 @@
+diff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/page.tsx
++++ b/app/dashboard/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/attendance/today/page.tsx b/app/dashboard/attendance/today/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/attendance/today/page.tsx
++++ b/app/dashboard/attendance/today/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/attendance/[schedule_id]/page.tsx b/app/dashboard/attendance/[schedule_id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/attendance/[schedule_id]/page.tsx
++++ b/app/dashboard/attendance/[schedule_id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/attendance/member/[id]/page.tsx b/app/dashboard/attendance/member/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/attendance/member/[id]/page.tsx
++++ b/app/dashboard/attendance/member/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/club/page.tsx b/app/dashboard/club/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/club/page.tsx
++++ b/app/dashboard/club/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/coaches/page.tsx b/app/dashboard/coaches/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/coaches/page.tsx
++++ b/app/dashboard/coaches/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/coaches/[id]/page.tsx b/app/dashboard/coaches/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/coaches/[id]/page.tsx
++++ b/app/dashboard/coaches/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/coaches/[id]/schedule/page.tsx b/app/dashboard/coaches/[id]/schedule/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/coaches/[id]/schedule/page.tsx
++++ b/app/dashboard/coaches/[id]/schedule/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/dashboard/page.tsx b/app/dashboard/dashboard/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/dashboard/page.tsx
++++ b/app/dashboard/dashboard/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/group/[id]/page.tsx b/app/dashboard/group/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/group/[id]/page.tsx
++++ b/app/dashboard/group/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/groups/page.tsx b/app/dashboard/groups/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/groups/page.tsx
++++ b/app/dashboard/groups/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/groups/add/page.tsx b/app/dashboard/groups/add/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/groups/add/page.tsx
++++ b/app/dashboard/groups/add/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/groups/[id]/page.tsx b/app/dashboard/groups/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/groups/[id]/page.tsx
++++ b/app/dashboard/groups/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/logout/page.tsx b/app/dashboard/logout/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/logout/page.tsx
++++ b/app/dashboard/logout/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/members/[id]/parents/page.tsx b/app/dashboard/members/[id]/parents/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/members/[id]/parents/page.tsx
++++ b/app/dashboard/members/[id]/parents/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/notifications/page.tsx b/app/dashboard/notifications/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/notifications/page.tsx
++++ b/app/dashboard/notifications/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/notifications/send/page.tsx b/app/dashboard/notifications/send/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/notifications/send/page.tsx
++++ b/app/dashboard/notifications/send/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/notifications/member/[id]/page.tsx b/app/dashboard/notifications/member/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/notifications/member/[id]/page.tsx
++++ b/app/dashboard/notifications/member/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/parents/page.tsx b/app/dashboard/parents/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/parents/page.tsx
++++ b/app/dashboard/parents/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/parents/[id]/page.tsx b/app/dashboard/parents/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/parents/[id]/page.tsx
++++ b/app/dashboard/parents/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/parents/[id]/children/page.tsx b/app/dashboard/parents/[id]/children/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/parents/[id]/children/page.tsx
++++ b/app/dashboard/parents/[id]/children/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/payments/page.tsx b/app/dashboard/payments/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/payments/page.tsx
++++ b/app/dashboard/payments/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/payments/add/page.tsx b/app/dashboard/payments/add/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/payments/add/page.tsx
++++ b/app/dashboard/payments/add/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/payments/[id]/page.tsx b/app/dashboard/payments/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/payments/[id]/page.tsx
++++ b/app/dashboard/payments/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/payments/member/[id]/page.tsx b/app/dashboard/payments/member/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/payments/member/[id]/page.tsx
++++ b/app/dashboard/payments/member/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/programs/page.tsx b/app/dashboard/programs/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/programs/page.tsx
++++ b/app/dashboard/programs/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/programs/add/page.tsx b/app/dashboard/programs/add/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/programs/add/page.tsx
++++ b/app/dashboard/programs/add/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/programs/[id]/page.tsx b/app/dashboard/programs/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/programs/[id]/page.tsx
++++ b/app/dashboard/programs/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/schedule/page.tsx b/app/dashboard/schedule/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/schedule/page.tsx
++++ b/app/dashboard/schedule/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/schedule/add/page.tsx b/app/dashboard/schedule/add/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/schedule/add/page.tsx
++++ b/app/dashboard/schedule/add/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/schedule/[id]/page.tsx b/app/dashboard/schedule/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/schedule/[id]/page.tsx
++++ b/app/dashboard/schedule/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/settings/page.tsx b/app/dashboard/settings/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/settings/page.tsx
++++ b/app/dashboard/settings/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/users/page.tsx b/app/dashboard/users/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/users/page.tsx
++++ b/app/dashboard/users/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/users/add/page.tsx b/app/dashboard/users/add/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/users/add/page.tsx
++++ b/app/dashboard/users/add/page.tsx
+@@
++export const dynamic = "force-dynamic";
+
+diff --git a/app/dashboard/users/[id]/page.tsx b/app/dashboard/users/[id]/page.tsx
+index 1111111..2222222 100644
+--- a/app/dashboard/users/[id]/page.tsx
++++ b/app/dashboard/users/[id]/page.tsx
+@@
++export const dynamic = "force-dynamic";

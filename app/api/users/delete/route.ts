@@ -1,41 +1,71 @@
 import { NextResponse } from "next/server";
-
-import { supabase } from "@/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { userId } = body;
 
-  // AUTH
-  //await requireAuth(req as any, NextResponse);
+  const res = NextResponse.json({ success: false });
 
-  // ROLE → owner, admin, superadmin
-  
-  // Obriši usera iz Supabase Auth
-  const { error: authError } = await supabase.auth.admin.deleteUser(userId);
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.headers
+            .get("cookie")
+            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
+        },
+        set(name, value, options) {
+          res.cookies.set(name, value, options);
+        },
+        remove(name) {
+          res.cookies.delete(name);
+        },
+      },
+    }
+  );
 
-  if (authError) {
-    return NextResponse.json(
-      { error: authError.message },
-      { status: 400 }
-    );
+  // AUTH → samo admin/superadmin smiju brisati usera
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Obriši usera iz users tablice
-  const { error: dbError } = await supabase
-    .from("users")
-    .delete()
-    .eq("auth_id", userId);
+  // PROVJERI ROLE
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
-  if (dbError) {
-    return NextResponse.json(
-      { error: dbError.message },
-      { status: 400 }
-    );
+  if (profileError || !profile || !["admin", "superadmin"].includes(profile.role)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // OBRIŠI PROFIL
+  const { error: profileDeleteError } = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", userId);
+
+  if (profileDeleteError) {
+    return NextResponse.json({ error: profileDeleteError.message }, { status: 400 });
+  }
+
+  // OBRIŠI USERA IZ AUTH
+  const { error: authDeleteError } = await supabase.auth.admin.deleteUser(userId);
+
+  if (authDeleteError) {
+    return NextResponse.json({ error: authDeleteError.message }, { status: 400 });
   }
 
   return NextResponse.json({
-    message: "User deleted successfully",
-    userId,
+    success: true,
+    deletedUserId: userId,
   });
 }

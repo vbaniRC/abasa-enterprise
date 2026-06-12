@@ -1,36 +1,58 @@
 import { NextResponse } from "next/server";
-
-
-import { supabase } from "@/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { clubId, name, description } = body;
 
-  // AUTH
-  //await requireAuth(req as any, NextResponse);
+  const res = NextResponse.json({ success: false });
 
-  // ROLE → admin, owner, superadmin
-  
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.headers
+            .get("cookie")
+            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
+        },
+        set(name, value, options) {
+          res.cookies.set(name, value, options);
+        },
+        remove(name) {
+          res.cookies.delete(name);
+        },
+      },
+    }
+  );
 
-  // Update kluba
-  const { error } = await supabase
+  // AUTH → dohvati usera
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // UPDATE CLUB
+  const { data, error } = await supabase
     .from("clubs")
     .update({
       name,
       description,
     })
-    .eq("id", clubId);
+    .eq("id", clubId)
+    .select()
+    .single();
 
   if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
   return NextResponse.json({
-    message: "Club updated successfully",
-    clubId,
+    success: true,
+    club: data,
   });
 }

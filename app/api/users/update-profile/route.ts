@@ -1,40 +1,59 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const { user_id, club_id } = body;
+  const body = await req.json();
+  const { full_name, avatar_url, additional_data } = body;
 
-    if (!user_id) {
-      return NextResponse.json(
-        { error: "Missing user_id" },
-        { status: 400 }
-      );
+  const res = NextResponse.json({ success: false });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.headers
+            .get("cookie")
+            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
+        },
+        set(name, value, options) {
+          res.cookies.set(name, value, options);
+        },
+        remove(name) {
+          res.cookies.delete(name);
+        },
+      },
     }
+  );
 
-    const { data, error } = await supabase
-      .from("users")
-      .update({ club_id })
-      .eq("id", user_id)
-      .select()
-      .single();
+  // AUTH → user mora biti logiran
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json(
-      { success: true, user: data },
-      { status: 200 }
-    );
-  } catch (err: any) {
-    return NextResponse.json(
-      { error: err.message || "Unexpected server error" },
-      { status: 500 }
-    );
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // UPDATE PROFILE
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      full_name,
+      avatar_url,
+      additional_data,
+    })
+    .eq("id", user.id)
+    .select()
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  return NextResponse.json({
+    success: true,
+    profile: data,
+  });
 }

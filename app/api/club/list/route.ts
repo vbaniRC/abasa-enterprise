@@ -1,29 +1,53 @@
+
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
-//import { requireAuth } from "@/lib/middleware/auth";
-//import { requireRole } from "@/lib/middleware/role";
-import { supabase } from "@/lib/supabase";
+import { createServerClient } from "@supabase/ssr";
 
 export async function GET(req: Request) {
-  // AUTH
- // await requireAuth(req as any, NextResponse);
+  const res = NextResponse.json({ success: false });
 
-  // ROLE → samo superadmin
- // await requireRole(req as any, NextResponse, ["superadmin"]);
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.headers
+            .get("cookie")
+            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
+        },
+        set(name, value, options) {
+          res.cookies.set(name, value, options);
+        },
+        remove(name) {
+          res.cookies.delete(name);
+        },
+      },
+    }
+  );
 
-  // Dohvati sve klubove
+  // AUTH → dohvati usera
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // DOHVATI SVE KLUBOVE
   const { data: clubs, error } = await supabase
     .from("clubs")
-    .select("*");
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
   return NextResponse.json({
-    message: "Clubs fetched successfully",
+    success: true,
     clubs,
   });
 }
