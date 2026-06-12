@@ -6,11 +6,11 @@ export default function LandingPage() {
 
       {/* BACKGROUND IMAGE */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 bg-[url('https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png')]"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 bg-abasa-hero"
       />
 
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/60 z-10" />
+      {/* DARK OVERLAY — sada transparent za test */}
+      <div className="absolute inset-0 bg-transparent z-10" />
 
       {/* TOP RIGHT NAV */}
       <nav className="absolute top-6 right-6 flex gap-6 text-white text-sm font-light tracking-wide z-20">
