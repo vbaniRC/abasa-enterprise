@@ -5,8 +5,9 @@ const nextConfig = {
       allowedOrigins: ['*'],
     },
   },
+  images: {
+    domains: ["grvomwpejsgokxcandkr.supabase.co"],
+  },
 };
 
 module.exports = nextConfig;
-
-
