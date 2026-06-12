@@ -2,11 +2,11 @@
 
 export default function LandingPage() {
   return (
-    <main className="relative min-h-screen w-full overflow-hidden">
+    <main className="relative min-h-screen w-full">
 
       {/* BACKGROUND IMAGE */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
         style={{
           backgroundImage:
             "url('https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png')",
@@ -14,10 +14,10 @@ export default function LandingPage() {
       />
 
       {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/60 z-10" />
 
       {/* TOP RIGHT NAV */}
-      <nav className="absolute top-6 right-6 flex gap-6 text-white text-sm font-light tracking-wide">
+      <nav className="absolute top-6 right-6 flex gap-6 text-white text-sm font-light tracking-wide z-20">
         <a
           href="/auth/login"
           className="hover:text-gray-300 transition"
@@ -33,7 +33,7 @@ export default function LandingPage() {
       </nav>
 
       {/* HERO CONTENT */}
-      <section className="relative z-10 flex flex-col items-center justify-center text-center min-h-screen px-6">
+      <section className="relative z-20 flex flex-col items-center justify-center text-center min-h-screen px-6">
         <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight drop-shadow-lg">
           Build. Automate. Scale.
         </h1>
