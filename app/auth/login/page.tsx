@@ -3,25 +3,33 @@ import { FaApple } from "react-icons/fa";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
 
-      <div
-        className="
-        w-full max-w-[360px]
-        rounded-[36px]
-        p-10
-        border border-[#141414]
-        bg-gradient-to-b from-white/5 to-white/[0.02]
-        backdrop-blur-xl
-        shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
-        relative
-      "
-      >
+      {/* HEADER – gornji lijevi kut */}
+      <header className="absolute top-0 left-0 px-8 py-6 z-30">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
+        <p className="text-sm text-white opacity-90 drop-shadow">
+          Welcome to the enterprise platform.
+        </p>
+      </header>
 
-        {/* ABASA - gornji desni kut */}
-        <div className="absolute top-6 right-6 text-white/70 text-xs font-medium tracking-wide">
-          ABASA
-        </div>
+      {/* LOGIN CARD */}
+     <div
+  className="
+    fade-in
+    w-full max-w-[360px]
+    rounded-[36px]
+    p-10
+    border border-[#141414]
+    bg-gradient-to-b from-white/5 to-white/[0.02]
+    backdrop-blur-xl
+    shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
+    relative
+    z-20
+  "
+>
+
+
 
         {/* Log in */}
         <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
@@ -49,24 +57,21 @@ export default function LoginPage() {
           {/* Continue with Email */}
           <button
             className="
-            w-[calc(50%+50px)] h-[48px]
-            rounded-[14px] text-[15px] font-medium
-            bg-white text-black
-            border border-white/20
-            hover:border-white hover:border-[3px]
-            hover:bg-neutral-200
-            transition
-            flex items-center justify-center
-            mb-[25px]
-          "
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-white text-black
+              border border-white/20
+              hover:border-white hover:border-[3px]
+              hover:bg-neutral-200
+              transition
+              flex items-center justify-center
+              mb-[25px]
+            "
           >
             Continue with Email
           </button>
 
           {/* Google */}
-         
-
-           {/* Google */}
           <button
             className="
               w-[calc(50%+50px)] h-[48px]
@@ -130,12 +135,12 @@ export default function LoginPage() {
         </p>
       </div>
 
-    {/* Powered by Copilot */}
-<div className="mt-6 flex items-center gap-2 opacity-80">
-  <span className="text-[10px] text-white tracking-wide opacity-80">
-    Powered by Copilot
-  </span>
-</div>
+      {/* Powered by Copilot */}
+      <div className="absolute bottom-6 flex items-center gap-2 opacity-80 z-20">
+        <span className="text-[10px] text-white tracking-wide opacity-80">
+          Powered by Copilot
+        </span>
+      </div>
 
     </div>
   );

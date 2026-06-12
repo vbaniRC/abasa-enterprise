@@ -32,17 +32,20 @@ export default function RegisterPage() {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
 
       <div
-        className="
-        w-full max-w-[360px]
-        rounded-[36px]
-        p-10
-        border border-[#141414]
-        bg-gradient-to-b from-white/5 to-white/[0.02]
-        backdrop-blur-xl
-        shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
-        relative
-      "
-      >
+  className="
+    fade-in
+    w-full max-w-[360px]
+    rounded-[36px]
+    p-10
+    border border-[#141414]
+    bg-gradient-to-b from-white/5 to-white/[0.02]
+    backdrop-blur-xl
+    shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
+    relative
+    z-20
+  "
+>
+
 
         {/* ABASA - gornji desni kut */}
         <div className="absolute top-6 right-6 text-white/70 text-xs font-medium tracking-wide">
