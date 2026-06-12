@@ -1,58 +1,35 @@
-"use client";
-
-import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const router = useRouter();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  const passwordStrength = (() => {
-    if (password.length === 0) return 0;
-    if (password.length < 6) return 1;
-    if (password.match(/[A-Z]/) && password.match(/[0-9]/) && password.length >= 8) return 3;
-    return 2;
-  })();
-
-  const passwordsMatch = confirm.length > 0 && password === confirm;
-
-  const handleContinue = () => {
-    if (!email) return;
-    router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
-  };
-
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#0A0A0A] px-4">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
 
+      {/* HEADER – gornji lijevi kut */}
+      <header className="absolute top-0 left-0 px-8 py-6 z-30">
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
+        <p className="text-sm text-white opacity-90 drop-shadow">
+          Welcome to the enterprise platform.
+        </p>
+      </header>
+
+      {/* REGISTER CARD */}
       <div
-  className="
-    fade-in
-    w-full max-w-[360px]
-    rounded-[36px]
-    p-10
-    border border-[#141414]
-    bg-gradient-to-b from-white/5 to-white/[0.02]
-    backdrop-blur-xl
-    shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
-    relative
-    z-20
-  "
->
+        className="
+          fade-in
+          w-full max-w-[360px]
+          rounded-[36px]
+          p-10
+          border border-[#141414]
+          bg-gradient-to-b from-white/5 to-white/[0.02]
+          backdrop-blur-xl
+          shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
+          relative
+          z-20
+        "
+      >
 
-
-        {/* ABASA - gornji desni kut */}
-        <div className="absolute top-6 right-6 text-white/70 text-xs font-medium tracking-wide">
-          ABASA
-        </div>
-
-        {/* Create account */}
+        {/* Title */}
         <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
           Create an account
         </h1>
@@ -64,8 +41,6 @@ export default function RegisterPage() {
             <input
               type="email"
               placeholder="Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               className="
                 w-full h-[24px] px-3 text-sm
                 bg-black text-white
@@ -77,85 +52,19 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Password input */}
-          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20 relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="
-                w-full h-[24px] px-3 pr-10 text-sm
-                bg-black text-white
-                border-none
-                rounded-lg
-                focus:outline-none focus:ring-2 focus:ring-white/40
-                placeholder-gray-400
-              "
-            />
-
-            {/* Eye icon */}
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer"
-            >
-              {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
-            </span>
-          </div>
-
-          {/* Password strength meter */}
-          {password.length > 0 && (
-            <div className="w-[calc(50%+50px)] flex gap-1">
-              <div className={`h-1 flex-1 rounded ${passwordStrength >= 1 ? "bg-red-500" : "bg-white/10"}`} />
-              <div className={`h-1 flex-1 rounded ${passwordStrength >= 2 ? "bg-yellow-500" : "bg-white/10"}`} />
-              <div className={`h-1 flex-1 rounded ${passwordStrength >= 3 ? "bg-green-500" : "bg-white/10"}`} />
-            </div>
-          )}
-
-          {/* Confirm Password input */}
-          <div
-            className={`
-              w-[calc(50%+50px)] bg-black rounded-lg border
-              ${confirm.length > 0 && !passwordsMatch ? "border-red-500" : "border-white/20"}
-            `}
-          >
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Confirm your Password"
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
-              className="
-                w-full h-[24px] px-3 pr-10 text-sm
-                bg-black text-white
-                border-none
-                rounded-lg
-                focus:outline-none focus:ring-2 focus:ring-white/40
-                placeholder-gray-400
-              "
-            />
-          </div>
-
-          {/* Password mismatch message */}
-          {confirm.length > 0 && !passwordsMatch && (
-            <p className="text-red-500 text-xs w-[calc(50%+50px)] text-left">
-              Passwords do not match
-            </p>
-          )}
-
           {/* Continue with Email */}
           <button
-            onClick={handleContinue}
             className="
-            w-[calc(50%+50px)] h-[48px]
-            rounded-[14px] text-[15px] font-medium
-            bg-white text-black
-            border border-white/20
-            hover:border-white hover:border-[3px]
-            hover:bg-neutral-200
-            transition
-            flex items-center justify-center
-            mb-[25px]
-          "
+              w-[calc(50%+50px)] h-[48px]
+              rounded-[14px] text-[15px] font-medium
+              bg-white text-black
+              border border-white/20
+              hover:border-white hover:border-[3px]
+              hover:bg-neutral-200
+              transition
+              flex items-center justify-center
+              mb-[25px]
+            "
           >
             Continue with Email
           </button>
@@ -212,20 +121,20 @@ export default function RegisterPage() {
 
         </div>
 
-        {/* Sign In */}
+        {/* Log in */}
         <p className="text-sm text-neutral-500 mt-[100px] text-center">
           Already have an account?{" "}
           <a
             href="/auth/login"
             className="text-neutral-400 font-medium hover:underline"
           >
-            Sign In
+            Log in
           </a>
         </p>
       </div>
 
       {/* Powered by Copilot */}
-      <div className="mt-6 flex items-center gap-2 opacity-80">
+      <div className="absolute bottom-6 flex items-center gap-2 opacity-80 z-20">
         <span className="text-[10px] text-white tracking-wide opacity-80">
           Powered by Copilot
         </span>
