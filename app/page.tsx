@@ -1,6 +1,6 @@
 "use client";
 
-export default function LandingPage() {
+export default function Page() {
   return (
     <main className="relative min-h-screen w-full">
       <div className="absolute top-10 left-10 w-40 h-40 bg-red-500"></div>

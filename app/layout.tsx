@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "ABASA",
-  description: "Landing page",
+  description: "Landing page test",
 };
 
 export default function RootLayout({ children }) {

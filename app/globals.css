@@ -1,3 +1,9 @@
+/* TEST: ovo mora obojiti cijelu stranicu u ŽUTO */
+body {
+  background: yellow !important;
+}
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
