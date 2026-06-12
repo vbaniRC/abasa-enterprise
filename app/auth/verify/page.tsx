@@ -1,7 +1,5 @@
 "use client";
 export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
 
 import { useSearchParams } from "next/navigation";
 
@@ -11,7 +9,6 @@ export default function VerifyPage() {
 
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
-
       <header className="absolute top-0 left-0 px-8 py-6 z-30">
         <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
         <p className="text-sm text-white opacity-90 drop-shadow">
@@ -64,7 +61,6 @@ export default function VerifyPage() {
           Powered by Copilot
         </span>
       </div>
-
     </div>
   );
 }
