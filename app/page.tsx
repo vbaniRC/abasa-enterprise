@@ -6,11 +6,7 @@ export default function LandingPage() {
 
       {/* BACKGROUND IMAGE */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{
-          backgroundImage:
-            "url('https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png')",
-        }}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 bg-[url('https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png')]"
       />
 
       {/* DARK OVERLAY */}
