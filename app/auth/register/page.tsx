@@ -1,166 +1,224 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { FaApple } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const supabase = createClient();
+
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-  async function handleRegister() {
-    if (!email) return;
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsLock, setCapsLock] = useState(false);
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+  // ⭐ Password strength util — direktno u komponenti
+  function getPasswordStrength(password: string) {
+    let score = 0;
 
-    if (!res.ok) {
-      console.error("Registration failed");
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score === 0) return { label: "Too weak", color: "bg-red-500", value: 0 };
+    if (score === 1) return { label: "Weak", color: "bg-red-500", value: 25 };
+    if (score === 2) return { label: "Medium", color: "bg-yellow-500", value: 50 };
+    if (score === 3) return { label: "Strong", color: "bg-green-500", value: 75 };
+    if (score === 4) return { label: "Very strong", color: "bg-green-600", value: 100 };
+
+    return { label: "Too weak", color: "bg-red-500", value: 0 };
+  }
+
+  const strength = getPasswordStrength(password);
+
+  const requirements = [
+    { label: "At least 8 characters", valid: password.length >= 8 },
+    { label: "One uppercase letter", valid: /[A-Z]/.test(password) },
+    { label: "One number", valid: /[0-9]/.test(password) },
+    { label: "One special character", valid: /[^A-Za-z0-9]/.test(password) },
+  ];
+
+  async function handleRegister(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
-    router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/verify`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    router.push("/auth/verify");
   }
 
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
-      {/* HEADER – gornji lijevi kut */}
-      <header className="absolute top-0 left-0 px-8 py-6 z-30">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
-        <p className="text-sm text-white opacity-90 drop-shadow">
-          Welcome to the enterprise platform.
-        </p>
-      </header>
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-black/40 border border-white/10 rounded-xl p-8 space-y-6 shadow-xl">
 
-      {/* REGISTER CARD */}
-      <div
-        className="
-          fade-in
-          w-full max-w-[360px]
-          rounded-[36px]
-          p-10
-          border border-[#141414]
-          bg-gradient-to-b from white/5 to-white/[0.02]
-          backdrop-blur-xl
-          shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
-          relative
-          z-20
-        "
-      >
-        {/* Title */}
-        <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
-          Create an account
-        </h1>
+        <h1 className="text-2xl font-semibold text-white">Create Account</h1>
 
-        <div className="flex flex-col items-center gap-[15px]">
-          {/* Email input */}
-          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
+        <form onSubmit={handleRegister} className="space-y-6">
+
+          {/* Email */}
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-200">
+              Email Address
+            </label>
             <input
+              id="email"
               type="email"
-              placeholder="Email Address"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="
-                w-full h-[24px] px-3 text-sm
-                bg-black text-white
-                border-none
-                rounded-lg
-                focus:outline-none focus:ring-2 focus:ring-white/40
-                placeholder-gray-400
-              "
+              className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+              placeholder="you@example.com"
             />
           </div>
 
+          {/* Password */}
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="password" className="text-sm font-medium text-gray-200">
+              Password
+            </label>
+
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyUp={(e) => setCapsLock(e.getModifierState("CapsLock"))}
+                className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 pr-10 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+                placeholder="Create a password"
+              />
+
+              {/* Show/Hide */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2 text-gray-400 hover:text-white"
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+
+            {/* Caps Lock warning */}
+            {capsLock && (
+              <p className="text-xs text-yellow-400">Caps Lock is ON</p>
+            )}
+
+            {/* Strength bar */}
+            <div className="w-full h-1 bg-white/10 rounded-md overflow-hidden">
+              <div
+                className={`h-full transition-all duration-300 ${strength.color}`}
+                style={{ width: `${strength.value}%` }}
+              />
+            </div>
+
+            {/* Strength label */}
+            <p className="text-xs text-gray-400">{strength.label}</p>
+
+            {/* Requirements */}
+            <div className="space-y-1 mt-2">
+              {requirements.map((req, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs">
+                  <span className={req.valid ? "text-green-500" : "text-gray-500"}>
+                    {req.valid ? "✔" : "✖"}
+                  </span>
+                  <span className={req.valid ? "text-green-500" : "text-gray-400"}>
+                    {req.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-200">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+              placeholder="Repeat your password"
+            />
+          </div>
+
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-sm shake">{error}</p>
+          )}
+
           {/* Continue with Email */}
           <button
-            onClick={handleRegister}
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-white text-black
-              border border-white/20
-              hover:border-white hover:border-[3px]
-              hover:bg-neutral-200
-              transition
-              flex items-center justify-center
-              mb-[25px]
-            "
+            type="submit"
+            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition"
           >
             Continue with Email
           </button>
 
+          {/* Divider */}
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-gray-400 text-xs">OR</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
           {/* Google */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center gap-2
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <FcGoogle size={18} />
-            <span>Continue with Google</span>
+            Continue with Google
           </button>
 
           {/* Apple */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center gap-2
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <FaApple size={18} className="text-black" />
-            <span>Continue with Apple</span>
+            Continue with Apple
           </button>
 
           {/* Passkey */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <span>Continue with Passkey</span>
+            Continue with Passkey
           </button>
-        </div>
 
-        {/* Log in */}
-        <p className="text-sm text-neutral-500 mt-[100px] text-center">
-          Already have an account?{" "}
-          <a
-            href="/auth/login"
-            className="text-neutral-400 font-medium hover:underline"
-          >
+        </form>
+
+        <p className="text-center text-gray-400 text-sm">
+          Already have an account{" "}
+          <a href="/auth/login" className="text-white hover:underline">
             Log in
           </a>
         </p>
-      </div>
-
-      {/* Powered by Copilot */}
-      <div className="absolute bottom-6 flex items-center gap-2 opacity-80 z-20">
-        <span className="text-[10px] text-white tracking-wide opacity-80">
-          Powered by Copilot
-        </span>
       </div>
     </div>
   );

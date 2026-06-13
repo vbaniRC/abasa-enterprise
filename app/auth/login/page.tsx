@@ -28,6 +28,20 @@ export default function LoginPage() {
     z-20
   "
 >
+// Password
+<div className="flex flex-col space-y-2">
+  <label htmlFor="password" className="text-sm font-medium text-gray-200">
+    Password
+  </label>
+  <input
+    id="password"
+    name="password"s
+    type="password"
+    required
+    className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+    placeholder="Your password"
+  />
+</div>
 
 
 
