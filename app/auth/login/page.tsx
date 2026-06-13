@@ -1,161 +1,188 @@
-import { FcGoogle } from "react-icons/fc";
-import { FaApple } from "react-icons/fa";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsLock, setCapsLock] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    router.push("/dashboard");
+  }
+
+  async function handleForgotPassword() {
+    setError("");
+    setResetSent(false);
+
+    if (!email) {
+      setError("Enter your email first.");
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/auth/reset`,
+    });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setResetSent(true);
+  }
+
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center relative px-4">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-black/40 border border-white/10 rounded-xl p-8 space-y-6 shadow-xl">
 
-      {/* HEADER – gornji lijevi kut */}
-      <header className="absolute top-0 left-0 px-8 py-6 z-30">
-        <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
-        <p className="text-sm text-white opacity-90 drop-shadow">
-          Welcome to the enterprise platform.
-        </p>
-      </header>
+        <h1 className="text-2xl font-semibold text-white">Log in</h1>
 
-      {/* LOGIN CARD */}
-     <div
-  className="
-    fade-in
-    w-full max-w-[360px]
-    rounded-[36px]
-    p-10
-    border border-[#141414]
-    bg-gradient-to-b from-white/5 to-white/[0.02]
-    backdrop-blur-xl
-    shadow-[0_0_55px_-12px_rgba(0,0,0,0.85)]
-    relative
-    z-20
-  "
->
-// Password
-<div className="flex flex-col space-y-2">
-  <label htmlFor="password" className="text-sm font-medium text-gray-200">
-    Password
-  </label>
-  <input
-    id="password"
-    name="password"s
-    type="password"
-    required
-    className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
-    placeholder="Your password"
-  />
-</div>
+        <form onSubmit={handleLogin} className="space-y-6">
 
-
-
-        {/* Log in */}
-        <h1 className="text-lg font-semibold mb-10 text-center text-white tracking-tight">
-          Log in
-        </h1>
-
-        <div className="flex flex-col items-center gap-[15px]">
-
-          {/* Email input */}
-          <div className="w-[calc(50%+50px)] bg-black rounded-lg border border-white/20">
+          {/* Email */}
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-200">
+              Email Address
+            </label>
             <input
+              id="email"
+              name="email"
               type="email"
-              placeholder="Email Address"
-              className="
-                w-full h-[24px] px-3 text-sm
-                bg-black text-white
-                border-none
-                rounded-lg
-                focus:outline-none focus:ring-2 focus:ring-white/40
-                placeholder-gray-400
-              "
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+              placeholder="you@example.com"
             />
           </div>
 
-          {/* Continue with Email */}
+          {/* Password */}
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="password" className="text-sm font-medium text-gray-200">
+              Password
+            </label>
+
+            <div className="relative">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyUp={(e) => setCapsLock(e.getModifierState("CapsLock"))}
+                className="w-full rounded-md bg-black/40 border border-white/10 px-3 py-2 pr-10 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20"
+                placeholder="Your password"
+              />
+
+              {/* Show/Hide */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2 text-gray-400 hover:text-white"
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+
+            {/* Caps Lock warning */}
+            {capsLock && (
+              <p className="text-xs text-yellow-400">Caps Lock is ON</p>
+            )}
+          </div>
+
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-sm shake">{error}</p>
+          )}
+
+          {/* Reset email sent */}
+          {resetSent && (
+            <p className="text-green-500 text-sm email-sent">
+              Password reset email sent.
+            </p>
+          )}
+
+          {/* Continue */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-white text-black
-              border border-white/20
-              hover:border-white hover:border-[3px]
-              hover:bg-neutral-200
-              transition
-              flex items-center justify-center
-              mb-[25px]
-            "
+            type="submit"
+            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition"
           >
-            Continue with Email
+            Log in
           </button>
+
+          {/* Forgot password */}
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-gray-400 text-sm hover:text-white transition underline-offset-2 hover:underline"
+          >
+            Forgot password
+          </button>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-gray-400 text-xs">OR</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
 
           {/* Google */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center gap-2
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <FcGoogle size={18} />
-            <span>Continue with Google</span>
+            Continue with Google
           </button>
 
           {/* Apple */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center gap-2
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <FaApple size={18} className="text-black" />
-            <span>Continue with Apple</span>
+            Continue with Apple
           </button>
 
           {/* Passkey */}
           <button
-            className="
-              w-[calc(50%+50px)] h-[48px]
-              rounded-[14px] text-[15px] font-medium
-              bg-[rgb(145,145,145)] text-black
-              border border-transparent
-              hover:bg-[rgb(220,220,220)]
-              hover:border-white hover:border-[3px]
-              transition
-              flex items-center justify-center
-            "
+            type="button"
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
           >
-            <span>Continue with Passkey</span>
+            Continue with Passkey
           </button>
 
-        </div>
+        </form>
 
-        {/* Sign Up */}
-        <p className="text-sm text-neutral-500 mt-[100px] text-center">
+        <p className="text-center text-gray-400 text-sm">
           Don’t have an account?{" "}
-          <a
-            href="/auth/register"
-            className="text-neutral-400 font-medium hover:underline"
-          >
-            Sign Up
+          <a href="/auth/register" className="text-white hover:underline">
+            Create one
           </a>
         </p>
       </div>
-
-      {/* Powered by Copilot */}
-      <div className="absolute bottom-6 flex items-center gap-2 opacity-80 z-20">
-        <span className="text-[10px] text-white tracking-wide opacity-80">
-          Powered by Copilot
-        </span>
-      </div>
-
     </div>
   );
 }
