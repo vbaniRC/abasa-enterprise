@@ -1,64 +1,63 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function VerifyPage() {
+  const supabase = createClient();
   const router = useRouter();
-  const params = useSearchParams();
 
-  const email = params.get("email") || "";
-
-  const [code, setCode] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [resent, setResent] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!email) {
-      setError("Missing email parameter.");
-    }
-  }, [email]);
+    async function checkVerification() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-  async function submitCode() {
-    setError("");
-    setLoading(true);
+      // Ako je user već verificiran → šaljemo ga dalje
+      if (user && user.email_confirmed_at) {
+        router.push("/dashboard"); // promijeni ako želiš
+        return;
+      }
 
-    const res = await fetch("/api/auth/verify-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, code }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.error || "Invalid code");
       setLoading(false);
-      return;
     }
 
-    // success → redirect
-    router.push("/dashboard");
-  }
+    checkVerification();
+  }, [supabase, router]);
 
-  async function resendCode() {
+  async function resendEmail() {
     setError("");
     setResent(false);
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error || "Failed to resend code");
+    if (!user) {
+      setError("No user session found.");
       return;
     }
 
-    setTimeout(() => setResent(true), 50);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: user.email!,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/verify`,
+      },
+    });
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setResent(false);
+    setTimeout(() => setResent(true), 10);
   }
 
   return (
@@ -67,45 +66,34 @@ export default function VerifyPage() {
 
         <h1 className="text-2xl font-semibold text-white">Verify your email</h1>
 
-        <p className="text-gray-300">
-          Enter the 6‑digit code we sent to:
-        </p>
+        {loading ? (
+          <p className="text-gray-400">Checking verification status…</p>
+        ) : (
+          <>
+            <p className="text-gray-300">
+              We’ve sent a verification link to your email.
+            </p>
 
-        <p className="text-white font-medium">{email}</p>
+            <p className="text-gray-500 text-sm">
+              Click the link in the email to activate your account.
+            </p>
 
-        {/* Error */}
-        {error && <p className="text-red-500 text-sm shake">{error}</p>}
+            {error && <p className="text-red-500 text-sm shake">{error}</p>}
 
-        {/* Resent animation */}
-        {resent && (
-          <p className="text-green-500 text-sm email-sent">
-            New code sent.
-          </p>
+            {resent && (
+              <p className="text-green-500 text-sm email-sent">
+                Verification email sent.
+              </p>
+            )}
+
+            <button
+              onClick={resendEmail}
+              className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
+            >
+              Resend verification email
+            </button>
+          </>
         )}
-
-        <input
-          type="text"
-          maxLength={6}
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          className="w-full bg-black/20 border border-white/10 text-white text-center py-3 rounded-md tracking-widest text-xl outline-none"
-          placeholder="______"
-        />
-
-        <button
-          onClick={submitCode}
-          disabled={loading}
-          className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition disabled:opacity-50"
-        >
-          {loading ? "Verifying…" : "Verify"}
-        </button>
-
-        <button
-          onClick={resendCode}
-          className="w-full text-gray-400 text-sm hover:text-white transition"
-        >
-          Resend code
-        </button>
       </div>
     </div>
   );
