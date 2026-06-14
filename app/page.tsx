@@ -7,6 +7,7 @@ export default function LandingPage() {
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_tenis.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_3.png",
+    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_4.png",
   ];
 
 
@@ -15,7 +16,7 @@ export default function LandingPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 12000); // mijenja sliku svakih 6 sekundi
+    }, 8000); // mijenja sliku svakih 6 sekundi
 
     return () => clearInterval(interval);
   }, []);
