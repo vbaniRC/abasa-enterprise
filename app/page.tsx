@@ -41,9 +41,12 @@ export default function LandingPage() {
         <div className="text-left">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
           <p className="text-sm text-white opacity-90 drop-shadow">
-            Welcome to the enterprise platform.
+            Welcome to the Club administration platform.
           </p>
-          <p className="text-sm text-white opacity-80 drop-shadow">
+          <p className="text-sm text-white opacity-95 drop-shadow">
+             
+          </p>
+          <p className="text-sm text-white opacity-95 drop-shadow">
             Absolutely FREE web + mobile.
           </p>
         </div>
