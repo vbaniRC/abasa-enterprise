@@ -9,13 +9,13 @@ export default function LandingPage() {
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_3.png",
   ];
 
-  
+
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 6000); // mijenja sliku svakih 6 sekundi
+    }, 12000); // mijenja sliku svakih 6 sekundi
 
     return () => clearInterval(interval);
   }, []);
@@ -42,6 +42,9 @@ export default function LandingPage() {
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
           <p className="text-sm text-white opacity-90 drop-shadow">
             Welcome to the enterprise platform.
+          </p>
+          <p className="text-sm text-white opacity-80 drop-shadow">
+            Absolutely FREE web + mobile.
           </p>
         </div>
 
