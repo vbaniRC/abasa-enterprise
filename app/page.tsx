@@ -10,22 +10,27 @@ export default function LandingPage() {
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_4.png",
   ];
 
+  const texts = [
+    "Club administration has never been easier.",
+    "Digitalize your sports organization.",
+    "Manage memberships, coaches, and training sessions.",
+    "ABASA — your club, your rules. For Free",
+  ]; 
 
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 8000); // mijenja sliku svakih 6 sekundi
+    }, 8000);
 
     return () => clearInterval(interval);
   }, []);
 
-
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
-      {/* Rotirajuće pozadinske slike */}
+      {/* Rotating background images */}
       {images.map((src, i) => (
         <div
           key={i}
@@ -36,19 +41,29 @@ export default function LandingPage() {
         />
       ))}
 
+      {/* Centered rotating text */}
+      <div className="absolute inset-0 flex items-center justify-center z-30">
+        {texts.map((text, i) => (
+          <p
+            key={i}
+            className={`text-white text-4xl font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {text}
+          </p>
+        ))}
+      </div>
+
       {/* Top bar */}
       <header className="absolute top-0 left-0 w-full flex items-center justify-between px-8 py-6 z-30">
-        {/* Logo + Title */}
         <div className="text-left">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
           <p className="text-sm text-white opacity-90 drop-shadow">
             Welcome to the Club administration platform.
           </p>
-          
         </div>
 
-
-        {/* Right side buttons */}
         <div className="flex items-center gap-4">
           <a
             href="/auth/login"
@@ -65,7 +80,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Dark overlay for readability */}
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/40 z-10"></div>
     </main>
   );
