@@ -72,7 +72,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-black/40 border border-white/10 rounded-xl p-8 space-y-6 shadow-xl">
 
-        <h1 className="text-2xl font-semibold text-white">Create Account</h1>
+        <h1 className="text-2xl font-semibold text-white">Create ABASA Account</h1>
 
         <form onSubmit={handleRegister} className="space-y-6">
 
