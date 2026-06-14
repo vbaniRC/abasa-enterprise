@@ -225,18 +225,19 @@ export default function RegisterPage() {
 
           {/* GOOGLE */}
           <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={isLoading("google")}
-            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition flex items-center justify-center gap-2 disabled:opacity-60"
-          >
-            {isLoading("google") ? (
-              <span className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <FcGoogle className="text-lg" />
-            )}
-            Continue with Google
-          </button>
+  type="button"
+  onClick={handleGoogle}
+  disabled={isLoading("google")}
+  className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm font-medium hover:bg-white/20 transition flex items-center justify-center gap-2 disabled:opacity-60"
+>
+  {isLoading("google") ? (
+    <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+  ) : (
+    <FcGoogle className="text-lg" />
+  )}
+  Continue with Google
+</button>
+
 
           {/* APPLE */}
           <button
