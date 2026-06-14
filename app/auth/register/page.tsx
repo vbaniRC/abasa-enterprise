@@ -134,7 +134,7 @@ export default function RegisterPage() {
     setLoadingProvider("passkey");
 
     try {
-      // 1) Register a new passkey
+      // 1) Register passkey
       const { error: regError } = await supabase.auth.webauthn.register({
         identifier: email,
       });
@@ -305,4 +305,22 @@ export default function RegisterPage() {
             type="button"
             onClick={handlePasskey}
             disabled={isLoading("passkey")}
-            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition flex items-center justify-center gap-2 disabled
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition flex items-center justify-center gap-2 disabled:opacity-60"
+          >
+            {isLoading("passkey") && (
+              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            )}
+            Continue with Passkey
+          </button>
+        </form>
+
+        <p className="text-center text-gray-400 text-sm">
+          Already have an account{" "}
+          <a href="/auth/login" className="text-white hover:underline">
+            Log in
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
