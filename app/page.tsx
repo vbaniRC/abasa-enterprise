@@ -19,6 +19,7 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
+  
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
