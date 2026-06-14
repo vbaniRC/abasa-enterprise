@@ -14,8 +14,8 @@ export default function LandingPage() {
     "Club administration has never been easier.",
     "Digitalize your sports organization.",
     "Manage memberships, coaches, and training sessions.",
-    "ABASA — your club, your rules. For Free",
-  ]; 
+    "ABASA — your club, your rules.",
+  ];
 
   const [index, setIndex] = useState(0);
 
@@ -41,12 +41,12 @@ export default function LandingPage() {
         />
       ))}
 
-      {/* Centered rotating text */}
-      <div className="absolute inset-0 flex items-center justify-center z-30">
+      {/* Fixed-position rotating text */}
+      <div className="absolute inset-0 flex items-center z-30">
         {texts.map((text, i) => (
           <p
             key={i}
-            className={`text-white text-4xl font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
+            className={`absolute left-[10px] text-white text-[2.25rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
           >
