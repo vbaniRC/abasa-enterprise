@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { FcGoogle } from "react-icons/fc";
+import { FaApple } from "react-icons/fa";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,8 +17,10 @@ export default function RegisterPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [capsLock, setCapsLock] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState<
+    "email" | "google" | "apple" | "passkey" | null
+  >(null);
 
-  // ⭐ Password strength util — direktno u komponenti
   function getPasswordStrength(password: string) {
     let score = 0;
 
@@ -46,36 +50,103 @@ export default function RegisterPage() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setLoadingProvider("email");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
+    try {
+      if (password !== confirmPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${location.origin}/auth/verify`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      router.push("/auth/verify");
+    } finally {
+      setLoadingProvider(null);
     }
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/verify`,
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-      return;
-    }
-
-    router.push("/auth/verify");
   }
+
+  async function handleGoogle() {
+    setError("");
+    setLoadingProvider("google");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } finally {
+      setLoadingProvider(null);
+    }
+  }
+
+  async function handleApple() {
+    setError("");
+    setLoadingProvider("apple");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "apple",
+        options: {
+          redirectTo: `${location.origin}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } finally {
+      setLoadingProvider(null);
+    }
+  }
+
+  async function handlePasskey() {
+    setError("");
+    setLoadingProvider("passkey");
+
+    try {
+      // Requires WebAuthn/passkey to be enabled in Supabase Auth settings
+      const { data, error } = await supabase.auth.signInWithWebAuthn();
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data?.session) {
+        router.push("/dashboard");
+      }
+    } finally {
+      setLoadingProvider(null);
+    }
+  }
+
+  const isLoading = (provider: "email" | "google" | "apple" | "passkey") =>
+    loadingProvider === provider;
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-black/40 border border-white/10 rounded-xl p-8 space-y-6 shadow-xl">
-
         <h1 className="text-2xl font-semibold text-white">Create ABASA Account</h1>
 
         <form onSubmit={handleRegister} className="space-y-6">
-
           {/* Email */}
           <div className="flex flex-col space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-gray-200">
@@ -110,7 +181,6 @@ export default function RegisterPage() {
                 placeholder="Create a password"
               />
 
-              {/* Show/Hide */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -120,12 +190,10 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Caps Lock warning */}
             {capsLock && (
               <p className="text-xs text-yellow-400">Caps Lock is ON</p>
             )}
 
-            {/* Strength bar */}
             <div className="w-full h-1 bg-white/10 rounded-md overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${strength.color}`}
@@ -133,10 +201,8 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Strength label */}
             <p className="text-xs text-gray-400">{strength.label}</p>
 
-            {/* Requirements */}
             <div className="space-y-1 mt-2">
               {requirements.map((req, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs">
@@ -153,7 +219,10 @@ export default function RegisterPage() {
 
           {/* Confirm Password */}
           <div className="flex flex-col space-y-2">
-            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-200">
+            <label
+              htmlFor="confirmPassword"
+              className="text-sm font-medium text-gray-200"
+            >
               Confirm Password
             </label>
             <input
@@ -167,17 +236,18 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Error */}
-          {error && (
-            <p className="text-red-500 text-sm shake">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           {/* Continue with Email */}
           <button
             type="submit"
-            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition"
+            disabled={isLoading("email")}
+            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Continue with Email
+            {isLoading("email") && (
+              <span className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            )}
+            <span>Continue with Email</span>
           </button>
 
           {/* Divider */}
@@ -190,27 +260,45 @@ export default function RegisterPage() {
           {/* Google */}
           <button
             type="button"
-            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
+            onClick={handleGoogle}
+            disabled={isLoading("google")}
+            className="w-full bg-white text-black py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Continue with Google
+            {isLoading("google") ? (
+              <span className="h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <FcGoogle className="text-lg" />
+            )}
+            <span>Continue with Google</span>
           </button>
 
           {/* Apple */}
           <button
             type="button"
-            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
+            onClick={handleApple}
+            disabled={isLoading("apple")}
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Continue with Apple
+            {isLoading("apple") ? (
+              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <FaApple className="text-lg" />
+            )}
+            <span>Continue with Apple</span>
           </button>
 
           {/* Passkey */}
           <button
             type="button"
-            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition"
+            onClick={handlePasskey}
+            disabled={isLoading("passkey")}
+            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Continue with Passkey
+            {isLoading("passkey") && (
+              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            )}
+            <span>Continue with Passkey</span>
           </button>
-
         </form>
 
         <p className="text-center text-gray-400 text-sm">
