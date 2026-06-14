@@ -43,14 +43,6 @@ export default function LandingPage() {
           <p className="text-sm text-white opacity-90 drop-shadow">
             Welcome to the Club administration platform.
           </p>
-          <p>
-            .
-
-          </p>  
-           <p> Lifetime FREE </p>
-          </p>  web + members mobile app</p>
-          <p>  totaly authomized</p>
-           <p>> Sign up today</p>
           
         </div>
 
