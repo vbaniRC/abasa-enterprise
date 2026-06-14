@@ -19,12 +19,10 @@ export default function RegisterPage() {
   const [capsLock, setCapsLock] = useState(false);
 
   const [loadingProvider, setLoadingProvider] = useState<
-    "email" | "google" | "apple" | "passkey" | null
+    "email" | "google" | "apple" | null
   >(null);
 
-  // -------------------------------
-  // PASSWORD STRENGTH
-  // -------------------------------
+  // Password strength
   function getPasswordStrength(password: string) {
     let score = 0;
 
@@ -51,9 +49,7 @@ export default function RegisterPage() {
     { label: "One special character", valid: /[^A-Za-z0-9]/.test(password) },
   ];
 
-  // -------------------------------
-  // EMAIL REGISTER
-  // -------------------------------
+  // Email register
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -84,9 +80,7 @@ export default function RegisterPage() {
     }
   }
 
-  // -------------------------------
-  // GOOGLE OAUTH
-  // -------------------------------
+  // Google OAuth
   async function handleGoogle() {
     setError("");
     setLoadingProvider("google");
@@ -105,9 +99,7 @@ export default function RegisterPage() {
     }
   }
 
-  // -------------------------------
-  // APPLE OAUTH
-  // -------------------------------
+  // Apple OAuth
   async function handleApple() {
     setError("");
     setLoadingProvider("apple");
@@ -126,48 +118,9 @@ export default function RegisterPage() {
     }
   }
 
-  // -------------------------------
-  // PASSKEY (WebAuthn)
-  // -------------------------------
-  async function handlePasskey() {
-    setError("");
-    setLoadingProvider("passkey");
-
-    try {
-      // 1) Register passkey
-      const { error: regError } = await supabase.auth.webauthn.register({
-        identifier: email,
-      });
-
-      if (regError) {
-        setError(regError.message);
-        return;
-      }
-
-      // 2) Sign in with passkey
-      const { data, error: signError } = await supabase.auth.webauthn.signIn({
-        identifier: email,
-      });
-
-      if (signError) {
-        setError(signError.message);
-        return;
-      }
-
-      if (data?.session) {
-        router.push("/dashboard");
-      }
-    } finally {
-      setLoadingProvider(null);
-    }
-  }
-
-  const isLoading = (p: "email" | "google" | "apple" | "passkey") =>
+  const isLoading = (p: "email" | "google" | "apple") =>
     loadingProvider === p;
 
-  // -------------------------------
-  // UI
-  // -------------------------------
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-black/40 border border-white/10 rounded-xl p-8 space-y-6 shadow-xl">
@@ -298,19 +251,6 @@ export default function RegisterPage() {
               <FaApple className="text-lg" />
             )}
             Continue with Apple
-          </button>
-
-          {/* PASSKEY */}
-          <button
-            type="button"
-            onClick={handlePasskey}
-            disabled={isLoading("passkey")}
-            className="w-full bg-white/10 border border-white/10 text-white py-2 rounded-md text-sm hover:bg-white/20 transition flex items-center justify-center gap-2 disabled:opacity-60"
-          >
-            {isLoading("passkey") && (
-              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            )}
-            Continue with Passkey
           </button>
         </form>
 
