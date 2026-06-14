@@ -6,7 +6,7 @@ export default function LandingPage() {
   const images = [
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_tenis.png",
-    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page3.png",
+    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page_3.png",
   ];
 
   const [index, setIndex] = useState(0);
