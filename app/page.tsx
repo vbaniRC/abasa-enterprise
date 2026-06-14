@@ -42,13 +42,16 @@ export default function LandingPage() {
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
           <p className="text-sm text-white opacity-90 drop-shadow">
             Welcome to the Club administration platform.
-
-
-            Lifetime FREE 
-            web + members mobile app
-            totaly authomized
-            Sign up today
           </p>
+          <p>
+            .
+
+          </p>  
+           <p> Lifetime FREE </p>
+          </p>  web + members mobile app</p>
+          <p>  totaly authomized</p>
+           <p>> Sign up today</p>
+          
         </div>
 
 
