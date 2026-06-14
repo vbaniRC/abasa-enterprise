@@ -6,9 +6,10 @@ export default function LandingPage() {
   const images = [
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_tenis.png",
-    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page_3.png",
+    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_3.png",
   ];
 
+  
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  
+
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
