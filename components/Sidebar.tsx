@@ -10,9 +10,9 @@ export default function Sidebar() {
 
   const links = [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Users", href: "/users" },
-    { name: "Club Settings", href: "/club" },
-    { name: "Logout", href: "/logout" },
+    { name: "Users", href: "/dashboard/users" },
+    { name: "Club Settings", href: "/dashboard/settings" },
+    { name: "Logout", href: "/dashboard/logout" },
   ];
 
   return (

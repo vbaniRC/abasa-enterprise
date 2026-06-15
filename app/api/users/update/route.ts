@@ -1,54 +1,37 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { isAuthResponse, requireRoles } from "@/lib/auth";
+import type { AppRole } from "@/lib/auth";
+import {
+  createRouteSupabaseClient,
+  createServiceRoleClient,
+} from "@/lib/supabaseServer";
+
+const elevatedRoles: AppRole[] = ["owner", "admin"];
+const managedRoles: AppRole[] = ["coach", "parent", "member"];
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { userId, full_name, avatar_url, role, club_id } = body;
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
+  const context = await requireRoles(supabase, ["admin", "superadmin"]);
 
-  const res = NextResponse.json({ success: false });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → samo admin/superadmin smiju ažurirati druge korisnike
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (isAuthResponse(context)) {
+    return withCookies(context);
   }
 
-  // PROVJERI ROLE
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+  const allowedRoles =
+    context.profile.role === "superadmin"
+      ? [...elevatedRoles, ...managedRoles]
+      : managedRoles;
 
-  if (profileError || !profile || !["admin", "superadmin"].includes(profile.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (role && !allowedRoles.includes(role)) {
+    return withCookies(
+      NextResponse.json({ error: "Forbidden" }, { status: 403 })
+    );
   }
 
-  // UPDATE PROFILE
-  const { data, error } = await supabase
+  const adminSupabase = createServiceRoleClient();
+  const { data, error } = await adminSupabase
     .from("profiles")
     .update({
       full_name,
@@ -61,11 +44,15 @@ export async function POST(req: Request) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return withCookies(
+      NextResponse.json({ error: error.message }, { status: 400 })
+    );
   }
 
-  return NextResponse.json({
-    success: true,
-    updatedUser: data,
-  });
+  return withCookies(
+    NextResponse.json({
+      success: true,
+      updatedUser: data,
+    })
+  );
 }

@@ -6,11 +6,13 @@ import { useAuth } from "../providers/AuthProvider";
 
 export default function Header() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/auth/login");
+    router.refresh();
   };
 
   return (
@@ -26,7 +28,7 @@ export default function Header() {
         {!loading && user && (
           <div className="text-right">
             <p className="text-sm font-medium">
-              {user.user_metadata?.full_name || "User"}
+              {profile?.full_name || user.user_metadata?.full_name || "User"}
             </p>
             <p className="text-xs text-gray-500">
               {user.email}
@@ -45,7 +47,7 @@ export default function Header() {
 
         {!loading && !user && (
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/auth/login")}
             className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           >
             Sign In

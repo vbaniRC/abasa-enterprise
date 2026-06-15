@@ -7,22 +7,39 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user on mount
   useEffect(() => {
+    const setAuthState = async (nextUser) => {
+      setUser(nextUser);
+
+      if (!nextUser) {
+        setProfile(null);
+        return;
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name, role, club_id")
+        .eq("id", nextUser.id)
+        .single();
+
+      setProfile(data ?? null);
+    };
+
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
-      setUser(data.user ?? null);
+      await setAuthState(data.user ?? null);
       setLoading(false);
     };
 
     getUser();
 
-    // Listen for login/logout events
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
+      async (_event, session) => {
+        await setAuthState(session?.user ?? null);
+        setLoading(false);
       }
     );
 
@@ -32,7 +49,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, profile, loading }}>
       {children}
     </AuthContext.Provider>
   );

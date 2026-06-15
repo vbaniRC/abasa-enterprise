@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
+import { isAuthResponse, requireRoles } from "@/lib/auth";
+import { createRouteSupabaseClient } from "@/lib/supabaseServer";
 
 export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
+  const context = await requireRoles(supabase, ["admin", "superadmin"]);
+
+  if (isAuthResponse(context)) {
+    return withCookies(context);
+  }
+
   const roles = [
     "superadmin",
     "owner",
@@ -11,11 +19,13 @@ export async function GET(req: Request) {
     "member",
   ];
 
-  return NextResponse.json(
-    {
-      message: "Roles fetched successfully",
-      roles,
-    },
-    { status: 200 }
+  return withCookies(
+    NextResponse.json(
+      {
+        message: "Roles fetched successfully",
+        roles,
+      },
+      { status: 200 }
+    )
   );
 }

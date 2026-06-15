@@ -30,7 +30,13 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    const redirectedFrom = new URLSearchParams(window.location.search).get(
+      "redirectedFrom"
+    );
+    router.replace(
+      redirectedFrom?.startsWith("/dashboard") ? redirectedFrom : "/dashboard"
+    );
+    router.refresh();
   }
 
   async function handleForgotPassword() {

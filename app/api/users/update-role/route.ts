@@ -1,54 +1,38 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { isAuthResponse, requireRoles } from "@/lib/auth";
+import type { AppRole } from "@/lib/auth";
+import {
+  createRouteSupabaseClient,
+  createServiceRoleClient,
+} from "@/lib/supabaseServer";
+
+const allowedTargetRoles: AppRole[] = [
+  "owner",
+  "admin",
+  "coach",
+  "parent",
+  "member",
+];
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { userId, role } = body;
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
 
-  const res = NextResponse.json({ success: false });
+  const context = await requireRoles(supabase, ["superadmin"]);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → samo admin/superadmin smiju mijenjati role
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (isAuthResponse(context)) {
+    return withCookies(context);
   }
 
-  // PROVJERI ROLE
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile || !["admin", "superadmin"].includes(profile.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!allowedTargetRoles.includes(role)) {
+    return withCookies(
+      NextResponse.json({ error: "Invalid role" }, { status: 400 })
+    );
   }
 
-  // UPDATE ROLE
-  const { data, error } = await supabase
+  const adminSupabase = createServiceRoleClient();
+  const { data, error } = await adminSupabase
     .from("profiles")
     .update({ role })
     .eq("id", userId)
@@ -56,11 +40,15 @@ export async function POST(req: Request) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return withCookies(
+      NextResponse.json({ error: error.message }, { status: 400 })
+    );
   }
 
-  return NextResponse.json({
-    success: true,
-    updatedUser: data,
-  });
+  return withCookies(
+    NextResponse.json({
+      success: true,
+      updatedUser: data,
+    })
+  );
 }

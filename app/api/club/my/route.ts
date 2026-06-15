@@ -1,16 +1,32 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getAuthContext, isAuthResponse } from "@/lib/auth";
+import { createRouteSupabaseClient } from "@/lib/supabaseServer";
 
 export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
-  const user = { club_id: null };
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
+  const context = await getAuthContext(supabase);
 
-  // Ako želiš da ruta radi bez auth-a:
-  return NextResponse.json(
-    {
-      message: "Auth middleware removed — implement later",
-      club: null,
-    },
-    { status: 200 }
-  );
+  if (isAuthResponse(context)) {
+    return withCookies(context);
+  }
+
+  if (!context.profile.club_id) {
+    return withCookies(
+      NextResponse.json({ error: "Club not found" }, { status: 404 })
+    );
+  }
+
+  const { data: club, error } = await supabase
+    .from("clubs")
+    .select("*")
+    .eq("id", context.profile.club_id)
+    .single();
+
+  if (error || !club) {
+    return withCookies(
+      NextResponse.json({ error: "Club not found" }, { status: 404 })
+    );
+  }
+
+  return withCookies(NextResponse.json({ success: true, club }));
 }

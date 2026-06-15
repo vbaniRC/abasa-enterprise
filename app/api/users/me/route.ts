@@ -1,17 +1,20 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getAuthContext, isAuthResponse } from "@/lib/auth";
+import { createRouteSupabaseClient } from "@/lib/supabaseServer";
 
 export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
-  const user = { auth_id: null };
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
+  const context = await getAuthContext(supabase);
 
-  // Ako želiš da ruta radi bez auth-a:
-  // možeš odmah vratiti praznog usera ili error
-  return NextResponse.json(
-    {
-      message: "Auth middleware removed — implement later",
-      user: null,
-    },
-    { status: 200 }
+  if (isAuthResponse(context)) {
+    return withCookies(context);
+  }
+
+  return withCookies(
+    NextResponse.json({
+      success: true,
+      user: context.user,
+      profile: context.profile,
+    })
   );
 }

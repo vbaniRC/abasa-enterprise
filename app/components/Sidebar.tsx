@@ -6,13 +6,13 @@ import { useAuth } from "../providers/AuthProvider";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   const menu = [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Users", href: "/users" },
-    { name: "Club", href: "/club" },
-    { name: "Settings", href: "/settings" },
+    { name: "Users", href: "/dashboard/users" },
+    { name: "Club", href: "/dashboard/settings" },
+    { name: "Settings", href: "/dashboard/settings" },
   ];
 
   return (
@@ -49,7 +49,7 @@ export default function Sidebar() {
         {user ? (
           <div className="text-sm">
             <p className="font-medium">
-              {user.user_metadata?.full_name || "User"}
+              {profile?.full_name || user.user_metadata?.full_name || "User"}
             </p>
             <p className="text-gray-500 text-xs">{user.email}</p>
           </div>

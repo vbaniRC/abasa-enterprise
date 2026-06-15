@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { isAuthResponse, requireRoles } from "@/lib/auth";
+import {
+  createRouteSupabaseClient,
+  createServiceRoleClient,
+} from "@/lib/supabaseServer";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -13,42 +17,18 @@ export async function POST(req: Request) {
     );
   }
 
-  const res = NextResponse.json({ success: false });
+  const { supabase, withCookies } = createRouteSupabaseClient(req);
+  const context = await requireRoles(supabase, ["admin", "superadmin"]);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → dohvati usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (isAuthResponse(context)) {
+    return withCookies(context);
   }
 
-  // UPLOAD TO STORAGE
+  const adminSupabase = createServiceRoleClient();
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await adminSupabase.storage
     .from("club-logos")
     .upload(`${clubId}.png`, buffer, {
       upsert: true,
@@ -56,14 +36,12 @@ export async function POST(req: Request) {
     });
 
   if (uploadError) {
-    return NextResponse.json(
-      { error: uploadError.message },
-      { status: 400 }
+    return withCookies(
+      NextResponse.json({ error: uploadError.message }, { status: 400 })
     );
   }
 
-  // UPDATE DB
-  const { error: dbError } = await supabase
+  const { error: dbError } = await adminSupabase
     .from("clubs")
     .update({
       logo_url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,
@@ -71,14 +49,15 @@ export async function POST(req: Request) {
     .eq("id", clubId);
 
   if (dbError) {
-    return NextResponse.json(
-      { error: dbError.message },
-      { status: 400 }
+    return withCookies(
+      NextResponse.json({ error: dbError.message }, { status: 400 })
     );
   }
 
-  return NextResponse.json({
-    success: true,
-    logoUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,
-  });
+  return withCookies(
+    NextResponse.json({
+      success: true,
+      logoUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,
+    })
+  );
 }
