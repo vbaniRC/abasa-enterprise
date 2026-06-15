@@ -39,7 +39,7 @@ export default function AttendanceToday() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Today's Attendance</h1>
+      <h1 className="text-3xl font-bold">Today&apos;s Attendance</h1>
 
       {items.length === 0 && (
         <p className="text-gray-500">No sessions today.</p>

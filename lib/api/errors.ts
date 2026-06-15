@@ -54,7 +54,20 @@ export function throwIfSupabaseError(
   }
 }
 
+function isNextDynamicServerError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    error.digest === "DYNAMIC_SERVER_USAGE"
+  );
+}
+
 export function handleApiError(error: unknown) {
+  if (isNextDynamicServerError(error)) {
+    throw error;
+  }
+
   if (error instanceof ApiError) {
     return errorResponse(error.message, {
       status: error.status,

@@ -4,6 +4,8 @@ import { registerSchema } from "@/lib/api/schemas";
 import { parseJsonBody } from "@/lib/api/validation";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export const POST = withApiHandler(async (request) => {
   const { email } = await parseJsonBody(request, registerSchema);
   const supabase = createSupabaseAdminClient();
