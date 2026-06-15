@@ -1,50 +1,22 @@
 export const dynamic = "force-dynamic";
-import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { getCurrentUser } from "@/lib/api/auth";
+import { unauthorized, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function GET(req: Request) {
-  const res = NextResponse.json({ success: false });
+export const GET = withApiHandler(async (request) => {
+  const { user, applyCookies } = await getCurrentUser(request);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → dohvati usera
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return NextResponse.json({ user: null });
+  if (!user) {
+    throw unauthorized();
   }
 
-  // DOHVATI PROFIL
+  const supabase = createSupabaseAdminClient();
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user.id)
     .single();
 
-  return NextResponse.json({
-    success: true,
-    user,
-    profile,
-  });
-}
+  return applyCookies(successResponse({ user, profile: profile ?? null }));
+});

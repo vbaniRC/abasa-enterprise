@@ -1,80 +1,40 @@
-import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { requireProfileRole, requireUser } from "@/lib/api/auth";
+import { throwIfSupabaseError, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { memberCreateSchema } from "@/lib/api/schemas";
+import { parseJsonBody } from "@/lib/api/validation";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const { email, password, full_name, club_id, parent_id } = body;
+export const POST = withApiHandler(async (request) => {
+  const { email, password, full_name, club_id, parent_id } =
+    await parseJsonBody(request, memberCreateSchema);
+  const user = await requireUser(request);
+  const supabase = createSupabaseAdminClient();
 
-  const res = NextResponse.json({ success: false });
+  await requireProfileRole(supabase, user.id, [
+    "admin",
+    "coach",
+    "superadmin",
+  ]);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → samo admin/coach/superadmin smiju kreirati člana
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // PROVJERI ROLE
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile || !["admin", "coach", "superadmin"].includes(profile.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-
-  // KREIRAJ USERA
-  const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-  });
-
-  if (createError) {
-    return NextResponse.json({ error: createError.message }, { status: 400 });
-  }
-
-  // KREIRAJ PROFIL
-  const { error: profileInsertError } = await supabase
-    .from("profiles")
-    .insert({
-      id: newUser.user.id,
-      full_name,
-      role: "member",
-      club_id,
-      parent_id: parent_id ?? null,
+  const { data: newUser, error: createError } =
+    await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
     });
 
-  if (profileInsertError) {
-    return NextResponse.json({ error: profileInsertError.message }, { status: 400 });
-  }
+  throwIfSupabaseError(createError);
 
-  return NextResponse.json({
-    success: true,
-    user: newUser.user,
+  const { error: profileInsertError } = await supabase.from("profiles").insert({
+    id: newUser.user.id,
+    full_name,
+    role: "member",
+    club_id,
+    parent_id: parent_id ?? null,
   });
-}
+
+  throwIfSupabaseError(profileInsertError);
+
+  return successResponse({ user: newUser.user });
+});

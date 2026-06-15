@@ -1,42 +1,18 @@
-import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { requireUser } from "@/lib/api/auth";
+import { throwIfSupabaseError, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { clubUpdateSchema } from "@/lib/api/schemas";
+import { parseJsonBody } from "@/lib/api/validation";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const { clubId, name, description } = body;
-
-  const res = NextResponse.json({ success: false });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
+export const POST = withApiHandler(async (request) => {
+  const { clubId, name, description } = await parseJsonBody(
+    request,
+    clubUpdateSchema
   );
+  await requireUser(request);
 
-  // AUTH → dohvati usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // UPDATE CLUB
+  const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
     .from("clubs")
     .update({
@@ -47,12 +23,7 @@ export async function POST(req: Request) {
     .select()
     .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
-  }
+  throwIfSupabaseError(error);
 
-  return NextResponse.json({
-    success: true,
-    club: data,
-  });
-}
+  return successResponse({ club: data });
+});

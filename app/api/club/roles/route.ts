@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
 
-export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
+export const GET = withApiHandler(async () => {
   const roles = [
     "superadmin",
     "owner",
@@ -11,11 +11,8 @@ export async function GET(req: Request) {
     "member",
   ];
 
-  return NextResponse.json(
-    {
-      message: "Roles fetched successfully",
-      roles,
-    },
-    { status: 200 }
-  );
-}
+  return successResponse({
+    message: "Roles fetched successfully",
+    roles,
+  });
+});
