@@ -12,7 +12,7 @@ export default function Sidebar() {
     { name: "Dashboard", href: "/dashboard" },
     { name: "Users", href: "/users" },
     { name: "Club Settings", href: "/club" },
-    { name: "Logout", href: "/logout" },
+    { name: "Logout", href: "/dashboard/logout" },
   ];
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/utils/supabase/client";
 import { useAuth } from "../providers/AuthProvider";
 
 export default function Header() {
@@ -9,8 +9,11 @@ export default function Header() {
   const { user, loading } = useAuth();
 
   const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/login");
+    router.replace("/auth/login");
+    router.refresh();
   };
 
   return (
@@ -45,7 +48,7 @@ export default function Header() {
 
         {!loading && !user && (
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/auth/login")}
             className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           >
             Sign In

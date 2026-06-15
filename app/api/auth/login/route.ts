@@ -1,30 +1,13 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+
+import {
+  createSupabaseRouteClient,
+  supabaseJson,
+} from "@/utils/supabase/server";
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
-
-  const res = NextResponse.json({ success: false });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
+  const { response, supabase } = createSupabaseRouteClient(req);
 
   // LOGIN
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -33,11 +16,8 @@ export async function POST(req: Request) {
   });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return supabaseJson({ error: error.message }, { status: 400 }, response);
   }
 
-  return NextResponse.json({
-    success: true,
-    user: data.user,
-  });
+  return supabaseJson({ success: true, user: data.user }, undefined, response);
 }

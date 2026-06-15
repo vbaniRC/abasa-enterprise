@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/utils/supabase/client";
 
 const AuthContext = createContext(null);
 
@@ -11,6 +11,8 @@ export function AuthProvider({ children }) {
 
   // Load user on mount
   useEffect(() => {
+    const supabase = createClient();
+
     const getUser = async () => {
       const { data } = await supabase.auth.getUser();
       setUser(data.user ?? null);
