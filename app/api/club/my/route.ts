@@ -1,16 +1,35 @@
-import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/api/auth";
+import { notFound, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
-  const user = { club_id: null };
+export const GET = withApiHandler(async (request) => {
+  const user = await requireUser(request);
+  const supabase = createSupabaseAdminClient();
 
-  // Ako želiš da ruta radi bez auth-a:
-  return NextResponse.json(
-    {
-      message: "Auth middleware removed — implement later",
-      club: null,
-    },
-    { status: 200 }
-  );
-}
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("club_id")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    throw notFound("Profile not found");
+  }
+
+  if (!profile.club_id) {
+    return successResponse({ club: null });
+  }
+
+  const { data: club, error: clubError } = await supabase
+    .from("clubs")
+    .select("*")
+    .eq("id", profile.club_id)
+    .single();
+
+  if (clubError || !club) {
+    throw notFound("Club not found");
+  }
+
+  return successResponse({ club });
+});

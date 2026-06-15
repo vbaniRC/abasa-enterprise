@@ -1,44 +1,21 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { throwIfSupabaseError, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { registerSchema } from "@/lib/api/schemas";
+import { parseJsonBody } from "@/lib/api/validation";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function POST(req: Request) {
-  try {
-    const { email } = await req.json();
+export const POST = withApiHandler(async (request) => {
+  const { email } = await parseJsonBody(request, registerSchema);
+  const supabase = createSupabaseAdminClient();
 
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
-    }
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/verify`,
+    },
+  });
 
-    // Backend Supabase client (service role)
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+  throwIfSupabaseError(error);
 
-    // Pošalji verification email (magic link / OTP)
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/verify`,
-      },
-    });
-
-    if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("Register API error:", err);
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
-  }
-}
+  return successResponse({ ok: true });
+});

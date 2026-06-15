@@ -1,53 +1,25 @@
-import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { requireUser } from "@/lib/api/auth";
+import { badRequest, throwIfSupabaseError, withApiHandler } from "@/lib/api/errors";
+import { successResponse } from "@/lib/api/response";
+import { clubIdSchema } from "@/lib/api/schemas";
+import { parseFormBody } from "@/lib/api/validation";
+import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-export async function POST(req: Request) {
-  const formData = await req.formData();
-  const file = formData.get("file") as File;
-  const clubId = formData.get("clubId") as string;
-
-  if (!file || !clubId) {
-    return NextResponse.json(
-      { error: "Missing file or clubId" },
-      { status: 400 }
-    );
-  }
-
-  const res = NextResponse.json({ success: false });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → dohvati usera
+export const POST = withApiHandler(async (request) => {
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { clubId },
+    formData,
+  } = await parseFormBody(request, clubIdSchema);
+  const file = formData.get("file");
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!file || typeof file === "string") {
+    throw badRequest("Missing file or clubId");
   }
 
-  // UPLOAD TO STORAGE
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  await requireUser(request);
 
+  const supabase = createSupabaseAdminClient();
+  const buffer = Buffer.from(await file.arrayBuffer());
   const { error: uploadError } = await supabase.storage
     .from("club-logos")
     .upload(`${clubId}.png`, buffer, {
@@ -55,30 +27,17 @@ export async function POST(req: Request) {
       contentType: file.type,
     });
 
-  if (uploadError) {
-    return NextResponse.json(
-      { error: uploadError.message },
-      { status: 400 }
-    );
-  }
+  throwIfSupabaseError(uploadError);
 
-  // UPDATE DB
+  const logoUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`;
   const { error: dbError } = await supabase
     .from("clubs")
     .update({
-      logo_url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,
+      logo_url: logoUrl,
     })
     .eq("id", clubId);
 
-  if (dbError) {
-    return NextResponse.json(
-      { error: dbError.message },
-      { status: 400 }
-    );
-  }
+  throwIfSupabaseError(dbError);
 
-  return NextResponse.json({
-    success: true,
-    logoUrl: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,
-  });
-}
+  return successResponse({ logoUrl });
+});
