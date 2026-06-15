@@ -67,7 +67,7 @@ export default async function MemberDetailPage({ params }: PageProps) {
       backHref="/dashboard/members"
       action={
         <Link
-          href="#"
+          href={`/dashboard/members/${member.id}/edit`}
           className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-200 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-white"
         >
           <PencilSquareIcon className="h-5 w-5" />
