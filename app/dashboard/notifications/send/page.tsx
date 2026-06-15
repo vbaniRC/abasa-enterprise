@@ -71,7 +71,7 @@ export default function SendNotificationPage() {
         },
       ]);
 
-      return router.push("/notifications");
+      return router.push("/dashboard/notifications");
     }
 
     // 2) Ako admin ili trener šalje svim trenerima
@@ -93,7 +93,7 @@ export default function SendNotificationPage() {
         ]);
       }
 
-      return router.push("/notifications");
+      return router.push("/dashboard/notifications");
     }
 
     // 3) Ako admin šalje grupi → automatski pronađi trenera te grupe
@@ -124,7 +124,7 @@ export default function SendNotificationPage() {
       },
     ]);
 
-    router.push("/notifications");
+    router.push("/dashboard/notifications");
   };
 
   return (

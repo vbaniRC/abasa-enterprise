@@ -90,7 +90,7 @@ export default function AddSchedulePage() {
       },
     ]);
 
-    router.push("/schedule");
+    router.push("/dashboard/schedule");
   };
 
   return (

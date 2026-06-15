@@ -32,7 +32,7 @@ export default function ParentsPage() {
         <h1 className="text-3xl font-bold">Parents</h1>
 
         <Link
-          href="/parents/add"
+          href="/dashboard/parents/add"
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
           Add Parent
@@ -68,7 +68,7 @@ export default function ParentsPage() {
                 <td className="p-3">{p.phone}</td>
                 <td className="p-3">
                   <Link
-                    href={`/parents/${p.id}`}
+                    href={`/dashboard/parents/${p.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     Edit

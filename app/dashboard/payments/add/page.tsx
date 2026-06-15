@@ -41,7 +41,7 @@ export default function AddPaymentPage() {
 
     await supabase.from("payments").insert([form]);
 
-    router.push("/payments");
+    router.push("/dashboard/payments");
   };
 
   return (

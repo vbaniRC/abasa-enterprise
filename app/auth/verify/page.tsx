@@ -20,7 +20,7 @@ export default function VerifyPage() {
 
       // Ako je user već verificiran → šaljemo ga dalje
       if (user && user.email_confirmed_at) {
-        router.push("/dashboard"); // promijeni ako želiš
+        router.push("/dashboard/dashboard"); // promijeni ako želiš
         return;
       }
 

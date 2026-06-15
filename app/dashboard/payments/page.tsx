@@ -32,7 +32,7 @@ export default function PaymentsPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Payments</h1>
         <Link
-          href="/payments/add"
+          href="/dashboard/payments/add"
           className="px-4 py-2 bg-blue-600 text-white rounded-md"
         >
           Add Payment
@@ -68,7 +68,7 @@ export default function PaymentsPage() {
                 </td>
                 <td className="p-3">
                   <Link
-                    href={`/payments/${p.id}`}
+                    href={`/dashboard/payments/${p.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     Edit

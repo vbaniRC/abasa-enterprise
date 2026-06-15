@@ -31,7 +31,7 @@ export default function ProgramsPage() {
         <h1 className="text-3xl font-bold">Programs</h1>
 
         <Link
-          href="/programs/add"
+          href="/dashboard/programs/add"
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
           Add Program
@@ -65,7 +65,7 @@ export default function ProgramsPage() {
                 </td>
                 <td className="p-3">
                   <Link
-                    href={`/programs/${p.id}`}
+                    href={`/dashboard/programs/${p.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     Edit

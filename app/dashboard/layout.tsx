@@ -1,9 +1,8 @@
+import type { ReactNode } from "react";
+import RootProvider from "../providers/RootProvider";
+
 export const dynamic = "force-dynamic";
 
-export default function DashboardLayout({ children }) {
-  return (
-    <div className="min-h-screen bg-black">
-      {children}
-    </div>
-  );
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  return <RootProvider>{children}</RootProvider>;
 }

@@ -75,7 +75,7 @@ export default function EditSchedulePage({ params }) {
       })
       .eq("id", id);
 
-    router.push("/schedule");
+    router.push("/dashboard/schedule");
   };
 
   const handleDelete = async () => {
@@ -87,7 +87,7 @@ export default function EditSchedulePage({ params }) {
 
     await supabase.from("schedule").delete().eq("id", id);
 
-    router.push("/schedule");
+    router.push("/dashboard/schedule");
   };
 
   if (!form) return <p>Loading...</p>;

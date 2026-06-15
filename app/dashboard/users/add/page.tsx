@@ -25,7 +25,7 @@ export default function AddMemberPage() {
 
     const { error } = await supabase.from("members").insert([form]);
 
-    if (!error) router.push("/users");
+    if (!error) router.push("/dashboard/users");
   };
 
   return (

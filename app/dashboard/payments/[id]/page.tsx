@@ -37,12 +37,12 @@ export default function EditPaymentPage({ params }) {
       .update(payment)
       .eq("id", id);
 
-    router.push("/payments");
+    router.push("/dashboard/payments");
   };
 
   const handleDelete = async () => {
     await supabase.from("payments").delete().eq("id", id);
-    router.push("/payments");
+    router.push("/dashboard/payments");
   };
 
   if (!payment) return <p>Loading...</p>;

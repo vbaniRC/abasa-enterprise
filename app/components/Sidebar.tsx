@@ -9,11 +9,21 @@ export default function Sidebar() {
   const { user } = useAuth();
 
   const menu = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Users", href: "/users" },
-    { name: "Club", href: "/club" },
-    { name: "Settings", href: "/settings" },
+    { name: "Dashboard", href: "/dashboard/dashboard" },
+    { name: "Users", href: "/dashboard/users" },
+    { name: "Parents", href: "/dashboard/parents" },
+    { name: "Coaches", href: "/dashboard/coaches" },
+    { name: "Programs", href: "/dashboard/programs" },
+    { name: "Groups", href: "/dashboard/groups" },
+    { name: "Schedule", href: "/dashboard/schedule" },
+    { name: "Payments", href: "/dashboard/payments" },
+    { name: "Notifications", href: "/dashboard/notifications" },
+    { name: "Club", href: "/dashboard/club" },
+    { name: "Settings", href: "/dashboard/settings" },
   ];
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col justify-between">
@@ -25,7 +35,7 @@ export default function Sidebar() {
 
         <nav className="p-4 space-y-2">
           {menu.map((item) => {
-            const active = pathname.startsWith(item.href);
+            const active = isActive(item.href);
 
             return (
               <Link
