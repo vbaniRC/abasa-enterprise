@@ -24,6 +24,12 @@ ABASA (`abasa-enterprise`) is a single **Next.js 14 App Router** app (TypeScript
 - `middleware.ts` runs the Supabase SSR client on `/dashboard`, `/users`, `/club`, `/settings`, and several `/auth/*` paths. The current `/dashboard` page is static (no auth gate), so login simply redirects there.
 - Health/liveness without Supabase: `GET /api/health` → `{"status":"ok"}`, `GET /api/hello` → `{"ok":true}`.
 
+### Testing auth (non-obvious)
+- The cloud project has email confirmation **on** (`mailer_autoconfirm: false`) and no working SMTP wired up, so UI self-signup at `/auth/register` cannot be confirmed via email. To get a usable login, provision a **pre-confirmed** test user with the service role key via the Admin API, e.g.:
+  `curl -X POST "$NEXT_PUBLIC_SUPABASE_URL/auth/v1/admin/users" -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" -H "Content-Type: application/json" -d '{"email":"you@example.com","password":"Passw0rd!","email_confirm":true}'`
+  Then sign in at `/auth/login`. A correct login redirects to `/dashboard`; a wrong password shows the cloud's `Invalid login credentials` error.
+- Known pre-existing app bug (not an env issue): the login page uses the `@supabase/ssr` cookie client while `AuthProvider` (`app/providers/AuthProvider.tsx`) uses the plain `@supabase/supabase-js` localStorage client, so after a successful login the `Sidebar`/`Header` user panel does not reflect the signed-in user.
+
 ### Checks available
 - Typecheck: `npx tsc --noEmit`.
 - Build: `npm run build`.
