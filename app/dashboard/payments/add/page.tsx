@@ -39,7 +39,14 @@ export default function AddPaymentPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await supabase.from("payments").insert([form]);
+    await supabase.from("payments").insert([
+      {
+        ...form,
+        member_id: Number(form.member_id),
+        amount: Number(form.amount),
+        month: Number(form.month),
+      },
+    ]);
 
     router.push("/payments");
   };

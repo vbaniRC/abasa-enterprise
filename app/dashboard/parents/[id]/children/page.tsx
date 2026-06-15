@@ -44,11 +44,11 @@ export default function ParentChildrenPage({ params }) {
     setSearchResults(data || []);
   };
 
-  const linkChild = async (memberId: string) => {
+  const linkChild = async (memberId: number) => {
     await supabase.from("members_parents").insert([
       {
         member_id: memberId,
-        parent_id: parentId,
+        parent_id: Number(parentId),
         relation: "parent",
       },
     ]);
@@ -57,12 +57,12 @@ export default function ParentChildrenPage({ params }) {
     setSearch("");
   };
 
-  const unlinkChild = async (memberId: string) => {
+  const unlinkChild = async (memberId: number) => {
     await supabase
       .from("members_parents")
       .delete()
       .eq("member_id", memberId)
-      .eq("parent_id", parentId);
+      .eq("parent_id", Number(parentId));
     loadChildren();
   };
 
