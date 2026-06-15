@@ -1,0 +1,12 @@
+-- Review-only migration for syncing the live Supabase cloud schema with repo schema.
+--
+-- No schema changes are included because this checkout does not contain schema.sql
+-- or any SQL baseline to compare against. Applying generated DDL without that
+-- source schema would risk drifting the cloud database away from the intended
+-- repo state.
+--
+-- Live schema metadata was fetched from the Supabase REST OpenAPI endpoint using
+-- the service-role key on 2026-06-15. See docs/supabase-schema-sync-review.md
+-- for the captured table list and comparison notes.
+--
+-- This migration is intentionally non-destructive and safe for review only.
