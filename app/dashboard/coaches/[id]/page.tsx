@@ -40,12 +40,12 @@ export default function EditCoachPage({ params }) {
 
     await supabase.from("coaches").update(payload).eq("id", id);
 
-    router.push("/coaches");
+    router.push("/dashboard/coaches");
   };
 
   const handleDelete = async () => {
     await supabase.from("coaches").delete().eq("id", id);
-    router.push("/coaches");
+    router.push("/dashboard/coaches");
   };
 
   if (!form) return <p>Loading...</p>;

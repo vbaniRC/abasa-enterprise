@@ -32,7 +32,7 @@ export default function CoachesPage() {
         <h1 className="text-3xl font-bold">Coaches</h1>
 
         <Link
-          href="/coaches/add"
+          href="/dashboard/coaches/add"
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
           Add Coach
@@ -82,7 +82,7 @@ export default function CoachesPage() {
                 </td>
                 <td className="p-3">
                   <Link
-                    href={`/coaches/${c.id}`}
+                    href={`/dashboard/coaches/${c.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     Edit

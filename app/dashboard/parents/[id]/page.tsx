@@ -33,12 +33,12 @@ export default function EditParentPage({ params }) {
 
     await supabase.from("parents").update(form).eq("id", id);
 
-    router.push("/parents");
+    router.push("/dashboard/parents");
   };
 
   const handleDelete = async () => {
     await supabase.from("parents").delete().eq("id", id);
-    router.push("/parents");
+    router.push("/dashboard/parents");
   };
 
   if (!form) return <p>Loading...</p>;

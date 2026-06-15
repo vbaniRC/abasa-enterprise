@@ -48,7 +48,7 @@ export default function AttendanceToday() {
       {items.map((s) => (
         <Link
           key={s.id}
-          href={`/attendance/${s.id}`}
+          href={`/dashboard/attendance/${s.id}`}
           className="block border rounded-lg p-4 hover:bg-gray-50"
         >
           <p className="font-semibold">{s.groupName}</p>

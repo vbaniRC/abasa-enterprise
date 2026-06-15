@@ -10,9 +10,9 @@ export default function Sidebar() {
 
   const menu = [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Users", href: "/users" },
-    { name: "Club", href: "/club" },
-    { name: "Settings", href: "/settings" },
+    { name: "Users", href: "/dashboard/users" },
+    { name: "Club", href: "/dashboard/club" },
+    { name: "Settings", href: "/dashboard/settings" },
   ];
 
   return (

@@ -25,7 +25,7 @@ export default function NotificationsPage() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Notifications</h1>
         <Link
-          href="/notifications/send"
+          href="/dashboard/notifications/send"
           className="px-4 py-2 bg-blue-600 text-white rounded-md"
         >
           Send Notification

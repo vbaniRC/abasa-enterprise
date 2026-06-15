@@ -33,12 +33,12 @@ export default function EditMemberPage({ params }) {
 
     await supabase.from("members").update(form).eq("id", id);
 
-    router.push("/users");
+    router.push("/dashboard/users");
   };
 
   const handleDelete = async () => {
     await supabase.from("members").delete().eq("id", id);
-    router.push("/users");
+    router.push("/dashboard/users");
   };
 
   if (!form) return <p>Loading...</p>;

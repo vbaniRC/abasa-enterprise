@@ -46,12 +46,12 @@ export default function EditGroupPage({ params }) {
 
     await supabase.from("groups").update(payload).eq("id", id);
 
-    router.push("/groups");
+    router.push("/dashboard/groups");
   };
 
   const handleDelete = async () => {
     await supabase.from("groups").delete().eq("id", id);
-    router.push("/groups");
+    router.push("/dashboard/groups");
   };
 
   if (!form) return <p>Loading...</p>;

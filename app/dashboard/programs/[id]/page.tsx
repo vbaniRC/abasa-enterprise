@@ -33,12 +33,12 @@ export default function EditProgramPage({ params }) {
 
     await supabase.from("programs").update(form).eq("id", id);
 
-    router.push("/programs");
+    router.push("/dashboard/programs");
   };
 
   const handleDelete = async () => {
     await supabase.from("programs").delete().eq("id", id);
-    router.push("/programs");
+    router.push("/dashboard/programs");
   };
 
   if (!form) return <p>Loading...</p>;

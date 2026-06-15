@@ -32,7 +32,7 @@ export default function UsersPage() {
         <h1 className="text-3xl font-bold">Members</h1>
 
         <Link
-          href="/users/add"
+          href="/dashboard/users/add"
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
         >
           Add Member
@@ -80,7 +80,7 @@ export default function UsersPage() {
                 </td>
                 <td className="p-3">
                   <Link
-                    href={`/users/${m.id}`}
+                    href={`/dashboard/users/${m.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     Edit

@@ -21,7 +21,7 @@ export default function AddProgramPage() {
 
     const { error } = await supabase.from("programs").insert([form]);
 
-    if (!error) router.push("/programs");
+    if (!error) router.push("/dashboard/programs");
   };
 
   return (

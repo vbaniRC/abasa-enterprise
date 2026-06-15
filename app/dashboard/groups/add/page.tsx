@@ -43,7 +43,7 @@ export default function AddGroupPage() {
 
     const { error } = await supabase.from("groups").insert([payload]);
 
-    if (!error) router.push("/groups");
+    if (!error) router.push("/dashboard/groups");
   };
 
   return (
