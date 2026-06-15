@@ -1,43 +1,18 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { ADMIN_ROLES, requireRole } from "@/app/lib/auth";
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { clubId } = body;
 
-  const res = NextResponse.json({ success: false });
+  const auth = await requireRole(ADMIN_ROLES);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH CHECK
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if ("response" in auth) {
+    return auth.response;
   }
 
   // DELETE CLUB
-  const { error } = await supabase
+  const { error } = await auth.adminSupabase!
     .from("clubs")
     .delete()
     .eq("id", clubId);

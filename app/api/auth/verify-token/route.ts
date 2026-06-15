@@ -1,28 +1,8 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@/utils/supabase/server";
 
-export async function POST(req: Request) {
-  const res = NextResponse.json({ valid: false });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
+export async function POST() {
+  const supabase = createClient();
 
   const { data, error } = await supabase.auth.getUser();
 

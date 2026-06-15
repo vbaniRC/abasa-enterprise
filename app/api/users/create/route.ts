@@ -1,54 +1,18 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { ADMIN_ROLES, requireRole } from "@/app/lib/auth";
 
 export async function POST(req: Request) {
   const body = await req.json();
   const { email, password, full_name, role, club_id } = body;
 
-  const res = NextResponse.json({ success: false });
+  const auth = await requireRole(ADMIN_ROLES);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → samo admin/superadmin smiju kreirati usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // PROVJERI ROLE
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile || !["admin", "superadmin"].includes(profile.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if ("response" in auth) {
+    return auth.response;
   }
 
   // KREIRAJ USERA
-  const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+  const { data: newUser, error: createError } = await auth.adminSupabase!.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
@@ -59,7 +23,7 @@ export async function POST(req: Request) {
   }
 
   // KREIRAJ PROFIL
-  const { error: profileInsertError } = await supabase
+  const { error: profileInsertError } = await auth.adminSupabase!
     .from("profiles")
     .insert({
       id: newUser.user.id,

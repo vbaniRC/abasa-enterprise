@@ -1,16 +1,32 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/app/lib/auth";
 
-export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
-  const user = { club_id: null };
+export async function GET() {
+  const auth = await requireUser();
 
-  // Ako želiš da ruta radi bez auth-a:
-  return NextResponse.json(
-    {
-      message: "Auth middleware removed — implement later",
-      club: null,
-    },
-    { status: 200 }
-  );
+  if ("response" in auth) {
+    return auth.response;
+  }
+
+  const { data: profile, error: profileError } = await auth.supabase
+    .from("profiles")
+    .select("club_id")
+    .eq("id", auth.user.id)
+    .single();
+
+  if (profileError || !profile?.club_id) {
+    return NextResponse.json({ error: "Club not found" }, { status: 404 });
+  }
+
+  const { data: club, error: clubError } = await auth.supabase
+    .from("clubs")
+    .select("*")
+    .eq("id", profile.club_id)
+    .single();
+
+  if (clubError || !club) {
+    return NextResponse.json({ error: "Club not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ success: true, club });
 }

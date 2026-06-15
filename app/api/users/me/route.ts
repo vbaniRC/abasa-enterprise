@@ -1,17 +1,26 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/app/lib/auth";
 
-export async function GET(req: Request) {
-  // TEMP: nema auth-a dok ne vratiš middleware
-  const user = { auth_id: null };
+export async function GET() {
+  const auth = await requireUser();
 
-  // Ako želiš da ruta radi bez auth-a:
-  // možeš odmah vratiti praznog usera ili error
-  return NextResponse.json(
-    {
-      message: "Auth middleware removed — implement later",
-      user: null,
-    },
-    { status: 200 }
-  );
+  if ("response" in auth) {
+    return auth.response;
+  }
+
+  const { data: profile, error } = await auth.supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", auth.user.id)
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  return NextResponse.json({
+    success: true,
+    user: auth.user,
+    profile,
+  });
 }

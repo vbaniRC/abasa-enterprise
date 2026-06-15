@@ -1,9 +1,11 @@
+import RootProvider from "../providers/RootProvider";
+
 export const dynamic = "force-dynamic";
 
 export default function DashboardLayout({ children }) {
   return (
     <div className="min-h-screen bg-black">
-      {children}
+      <RootProvider>{children}</RootProvider>
     </div>
   );
 }

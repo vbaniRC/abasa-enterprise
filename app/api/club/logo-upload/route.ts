@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { ADMIN_ROLES, requireRole } from "@/app/lib/auth";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -13,42 +13,17 @@ export async function POST(req: Request) {
     );
   }
 
-  const res = NextResponse.json({ success: false });
+  const auth = await requireRole(ADMIN_ROLES);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → dohvati usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if ("response" in auth) {
+    return auth.response;
   }
 
   // UPLOAD TO STORAGE
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await auth.adminSupabase!.storage
     .from("club-logos")
     .upload(`${clubId}.png`, buffer, {
       upsert: true,
@@ -63,7 +38,7 @@ export async function POST(req: Request) {
   }
 
   // UPDATE DB
-  const { error: dbError } = await supabase
+  const { error: dbError } = await auth.adminSupabase!
     .from("clubs")
     .update({
       logo_url: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/club-logos/${clubId}.png`,

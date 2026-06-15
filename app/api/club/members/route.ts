@@ -1,45 +1,20 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { requireUser } from "@/app/lib/auth";
 
-export async function GET(req: Request) {
-  const res = NextResponse.json({ success: false });
+export async function GET() {
+  const auth = await requireUser();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → dohvati usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if ("response" in auth) {
+    return auth.response;
   }
 
   // DOHVATI PROFIL
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await auth.supabase
     .from("profiles")
     .select("club_id")
-    .eq("id", user.id)
+    .eq("id", auth.user.id)
     .single();
 
   if (profileError || !profile) {
@@ -50,7 +25,7 @@ export async function GET(req: Request) {
   }
 
   // DOHVATI SVE ČLANOVE KLUBA
-  const { data: members, error: membersError } = await supabase
+  const { data: members, error: membersError } = await auth.supabase
     .from("profiles")
     .select("*")
     .eq("club_id", profile.club_id)

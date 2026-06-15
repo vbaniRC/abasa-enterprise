@@ -1,52 +1,16 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { ADMIN_ROLES, requireRole } from "@/app/lib/auth";
 
-export async function GET(req: Request) {
-  const res = NextResponse.json({ success: false });
+export async function GET() {
+  const auth = await requireRole(ADMIN_ROLES);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name) {
-          return req.headers
-            .get("cookie")
-            ?.match(new RegExp(`${name}=([^;]+)`))?.[1] ?? null;
-        },
-        set(name, value, options) {
-          res.cookies.set(name, value, options);
-        },
-        remove(name) {
-          res.cookies.delete(name);
-        },
-      },
-    }
-  );
-
-  // AUTH → samo admin/superadmin smiju vidjeti listu usera
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // PROVJERI ROLE
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError || !profile || !["admin", "superadmin"].includes(profile.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if ("response" in auth) {
+    return auth.response;
   }
 
   // DOHVATI SVE PROFILE
-  const { data: users, error } = await supabase
+  const { data: users, error } = await auth.adminSupabase!
     .from("profiles")
     .select("*")
     .order("created_at", { ascending: false });

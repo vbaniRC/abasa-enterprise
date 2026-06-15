@@ -10,7 +10,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   return (
@@ -45,7 +45,7 @@ export default function Header() {
 
         {!loading && !user && (
           <button
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/auth/login")}
             className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           >
             Sign In
