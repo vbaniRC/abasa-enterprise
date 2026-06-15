@@ -1,41 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
 
 export default function MemberParentsPage({ params }) {
-  const router = useRouter();
   const { id: memberId } = params;
+  const parsedMemberId = Number(memberId);
 
   const [member, setMember] = useState(null);
   const [parents, setParents] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
-    loadMember();
-    loadParents();
-  }, []);
-
-  const loadMember = async () => {
+  const loadMember = useCallback(async () => {
     const { data } = await supabase
       .from("members")
       .select("*")
-      .eq("id", memberId)
+      .eq("id", parsedMemberId)
       .single();
 
     setMember(data);
-  };
+  }, [parsedMemberId]);
 
-  const loadParents = async () => {
+  const loadParents = useCallback(async () => {
     const { data } = await supabase
       .from("members_parents")
       .select("parent_id, relation, parents(*)")
-      .eq("member_id", memberId);
+      .eq("member_id", parsedMemberId);
 
     setParents(data || []);
-  };
+  }, [parsedMemberId]);
+
+  useEffect(() => {
+    loadMember();
+    loadParents();
+  }, [loadMember, loadParents]);
 
   const handleSearch = async () => {
     if (search.trim().length < 2) return;
@@ -51,7 +52,7 @@ export default function MemberParentsPage({ params }) {
   const linkParent = async (parentId) => {
     await supabase.from("members_parents").insert([
       {
-        member_id: memberId,
+        member_id: parsedMemberId,
         parent_id: parentId,
         relation: "parent",
       },
@@ -66,7 +67,7 @@ export default function MemberParentsPage({ params }) {
     await supabase
       .from("members_parents")
       .delete()
-      .eq("member_id", memberId)
+      .eq("member_id", parsedMemberId)
       .eq("parent_id", parentId);
 
     loadParents();

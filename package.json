@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "eslint app/dashboard/club",
+    "lint": "eslint app/dashboard/club app/dashboard/members",
     "typecheck": "tsc --noEmit",
     "start": "next start"
   },
