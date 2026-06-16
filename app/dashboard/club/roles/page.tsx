@@ -18,6 +18,7 @@ import {
 import { getClubCoaches, getClubContext } from "@/app/dashboard/club/_lib/data";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type PageProps = {
   searchParams?: Record<string, string | string[] | undefined>;

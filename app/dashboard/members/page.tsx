@@ -18,6 +18,7 @@ import { getMembers } from "@/app/dashboard/members/_lib/actions";
 import type { MemberStatus } from "@/app/dashboard/members/_lib/types";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type PageProps = {
   searchParams?: Record<string, string | string[] | undefined>;

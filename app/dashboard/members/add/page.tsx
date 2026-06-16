@@ -9,6 +9,7 @@ import { requireMembersUser } from "@/app/dashboard/members/_lib/server";
 import { MemberForm } from "@/components/member/MemberForm";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AddMemberPage() {
   await requireMembersUser();

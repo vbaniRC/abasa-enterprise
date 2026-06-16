@@ -17,6 +17,7 @@ import {
 import { getMemberById } from "@/app/dashboard/members/_lib/actions";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type PageProps = {
   params: { id: string };
