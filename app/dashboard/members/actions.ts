@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import { requireUserClubId } from "@/app/dashboard/members/_lib/server";
@@ -109,11 +110,12 @@ async function findAuthUserIdByEmail(
       throw new Error(error.message);
     }
 
-    const user = data.users.find(
+    const users = data.users as User[];
+    const user = users.find(
       (candidate) => candidate.email?.toLowerCase() === normalizedEmail
     );
 
-    if (user || data.users.length < 1000) {
+    if (user || users.length < 1000) {
       return user?.id ?? null;
     }
   }

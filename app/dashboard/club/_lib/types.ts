@@ -22,6 +22,8 @@ export type Profile = Omit<ProfileRow, "role"> & {
   } | null;
 };
 
+export type ClubUser = Profile;
+
 export type MemberProfile = Profile & {
   display_status: string;
   display_joined_at: string | null;

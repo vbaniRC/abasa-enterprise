@@ -6,7 +6,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/supabase";
 
 import { requireDashboardUser } from "./server";
-import type { Club, MemberProfile, Profile } from "./types";
+import type { Club, ClubUser, MemberProfile, Profile } from "./types";
 
 const PROFILE_SELECT = "*";
 type Supabase = SupabaseClient<Database>;
@@ -106,7 +106,7 @@ export async function getClubContext(): Promise<{
   profile: Profile | null;
 }> {
   const user = await requireDashboardUser();
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabaseAdminClient() as Supabase;
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select(PROFILE_SELECT)
@@ -149,24 +149,22 @@ export async function getClubContext(): Promise<{
     .maybeSingle();
 
   const normalizedProfile = normalizeProfile(profile as Profile);
-  const [owner] = await withAuthEmails(
-    supabase,
-    ownerProfile
-      ? [ownerProfile as Profile]
-      : profile.is_owner
-        ? [normalizedProfile]
-        : [
-            {
-              id: user.id,
-              full_name: user.user_metadata?.full_name ?? null,
-              role: "owner",
-              club_id: profile.club_id,
-              email: user.email ?? null,
-              is_owner: true,
-              created_at: null,
-            },
-          ]
-  );
+  const ownerCandidates: ClubUser[] = ownerProfile
+    ? [ownerProfile as ClubUser]
+    : profile.is_owner
+      ? [normalizedProfile]
+      : [
+          {
+            id: user.id,
+            full_name: user.user_metadata?.full_name ?? null,
+            role: "owner",
+            club_id: profile.club_id,
+            email: user.email ?? null,
+            is_owner: true,
+            created_at: null,
+          },
+        ];
+  const [owner] = await withAuthEmails(supabase, ownerCandidates);
   const club = normalizeClub(clubRow, owner?.id ?? profile.id);
 
   return { user, supabase, club, owner, profile: normalizedProfile };
@@ -216,7 +214,7 @@ export async function getClubMembers(
   }
 
   const profiles = await withAuthEmails(supabase, (data ?? []) as Profile[]);
-  const members = profiles.map((profile) => ({
+  const members: MemberProfile[] = profiles.map((profile) => ({
     ...profile,
     display_status: profile.status ?? "active",
     display_joined_at: profile.joined_at ?? profile.created_at ?? null,
