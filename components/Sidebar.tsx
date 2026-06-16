@@ -148,6 +148,12 @@ export default function Sidebar({ children, className }: SidebarProps) {
   };
 
   const triggerDirection = isCollapsed || (!isDesktop && !isMobileOpen) ? ">" : "<";
+  const triggerLabel =
+    !isDesktop && !isMobileOpen
+      ? "Open sidebar"
+      : isCollapsed
+        ? "Expand sidebar"
+        : "Collapse sidebar";
 
   return (
     <div className={clsx("relative min-h-screen bg-background text-content lg:flex", className)}>
@@ -162,13 +168,13 @@ export default function Sidebar({ children, className }: SidebarProps) {
 
       <button
         type="button"
-        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        aria-label={triggerLabel}
         aria-expanded={!isCollapsed}
         onClick={handleToggle}
-        className="group fixed left-0 top-1/2 z-[70] flex h-20 w-7 -translate-y-1/2 items-center justify-center rounded-r-lg border border-l-0 border-border/70 bg-background/95 text-content-subtle shadow-sm transition-colors duration-[180ms] ease-in-out hover:bg-sky-400/10 hover:text-content focus-visible:z-[80]"
+        className="group fixed left-0 top-1/2 z-[70] flex h-24 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-sky-300/25 bg-surface-overlay/95 text-content shadow-lg ring-1 ring-black/20 transition-colors duration-[180ms] ease-in-out hover:border-sky-300/70 hover:bg-sky-400/15 hover:text-sky-100 focus-visible:z-[80]"
       >
-        <span className="block font-mono text-lg leading-none group-hover:hidden">|</span>
-        <span className="hidden font-mono text-lg leading-none group-hover:block">
+        <span className="block font-mono text-xl font-semibold leading-none group-hover:hidden">|</span>
+        <span className="hidden font-mono text-xl font-semibold leading-none group-hover:block">
           {triggerDirection}
         </span>
       </button>
