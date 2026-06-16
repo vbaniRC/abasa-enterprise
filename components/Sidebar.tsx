@@ -70,7 +70,7 @@ export function SidebarItem({
         "group relative flex h-11 items-center gap-3 rounded-lg border-l-[3px] text-sm transition-all duration-[180ms] ease-in-out",
         isCollapsed ? "justify-center px-0" : "px-4",
         isActive
-          ? "border-violet-400 font-semibold text-violet-300"
+          ? "border-violet-400 bg-violet-500/10 font-semibold text-violet-300"
           : "border-transparent text-content-muted hover:border-sky-300 hover:bg-sky-400/10 hover:text-content"
       )}
     >
