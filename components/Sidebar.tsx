@@ -174,9 +174,16 @@ export default function Sidebar({ children, className }: SidebarProps) {
         onBlur={() => setIsTriggerHovered(false)}
         onFocus={() => setIsTriggerHovered(true)}
         onClick={handleToggle}
+        onMouseEnter={() => setIsTriggerHovered(true)}
+        onMouseLeave={() => setIsTriggerHovered(false)}
         onPointerEnter={() => setIsTriggerHovered(true)}
         onPointerLeave={() => setIsTriggerHovered(false)}
-        className="group fixed left-0 top-1/2 z-[70] flex h-24 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-sky-300/25 bg-surface-overlay/95 text-content shadow-lg ring-1 ring-black/20 transition-colors duration-[180ms] ease-in-out hover:border-sky-300/70 hover:bg-sky-400/15 hover:text-sky-100 focus-visible:z-[80]"
+        className={clsx(
+          "fixed left-0 top-1/2 z-[70] flex h-24 w-9 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 shadow-lg ring-1 ring-black/20 transition-colors duration-[180ms] ease-in-out focus-visible:z-[80]",
+          isTriggerHovered
+            ? "border-sky-200 bg-sky-300 text-slate-950"
+            : "border-sky-300/25 bg-surface-overlay/95 text-content"
+        )}
       >
         <span className="font-mono text-xl font-semibold leading-none">
           {isTriggerHovered ? triggerDirection : "|"}
