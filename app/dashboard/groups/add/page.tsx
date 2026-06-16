@@ -41,7 +41,7 @@ export default function AddGroupPage() {
       max_age: form.max_age ? Number(form.max_age) : null,
     };
 
-    const { error } = await supabase.from("groups").insert([payload]);
+    const { error } = await supabase.from("groups").insert([payload as never]);
 
     if (!error) router.push("/groups");
   };

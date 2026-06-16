@@ -19,7 +19,7 @@ export default function AddProgramPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { error } = await supabase.from("programs").insert([form]);
+    const { error } = await supabase.from("programs").insert([form as never]);
 
     if (!error) router.push("/programs");
   };

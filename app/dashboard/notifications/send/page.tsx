@@ -117,7 +117,7 @@ export default function SendNotificationPage() {
       {
         sender_id: senderId,
         group_id: form.group_id || null,
-        member_id: form.member_id || null,
+        member_id: form.member_id ? Number(form.member_id) : null,
         coach_id: coachId,
         title: form.title,
         message: form.message,
