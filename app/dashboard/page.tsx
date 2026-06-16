@@ -43,7 +43,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium uppercase tracking-[0.3em] text-blue-200">
                   ABASA dashboard
                 </p>
-                <h1 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-5xl">
+                <h1 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-3xl">
                   Welcome back, {loading ? "..." : displayName}
                 </h1>
                 <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
