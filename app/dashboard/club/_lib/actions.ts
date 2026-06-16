@@ -60,6 +60,14 @@ async function requireClub(path: string) {
     redirect(statePath(path, "error", "Club not found."));
   }
 
+  const canManageClub =
+    context.profile?.is_owner ||
+    ["owner", "admin", "superadmin"].includes(context.profile?.role ?? "");
+
+  if (!canManageClub) {
+    redirect(statePath(path, "error", "You do not have permission to manage this club."));
+  }
+
   return {
     ...context,
     club: context.club,
@@ -79,12 +87,18 @@ export async function updateClubAction(formData: FormData) {
     );
   }
 
-  const { supabase, club, user } = await requireClub("/dashboard/club/edit");
+  const { supabase, club } = await requireClub("/dashboard/club/edit");
   const { error } = await supabase
-    .from("clubs")
-    .update(parsed.data)
-    .eq("id", club.id)
-    .eq("owner_id", user.id);
+    .from("club")
+    .update({
+      name: parsed.data.name,
+      adresa_sjedista: parsed.data.address,
+      city: parsed.data.city,
+      country: parsed.data.country,
+      sluzbeni_telefon: parsed.data.phone,
+      sluzbeni_email: parsed.data.email,
+    })
+    .eq("id", club.id);
 
   if (error) {
     redirect(statePath("/dashboard/club/edit", "error", error.message));
@@ -183,12 +197,11 @@ export async function updateClubLogoAction(logoUrl: string) {
     };
   }
 
-  const { supabase, club, user } = await requireClub("/dashboard/club/logo");
+  const { supabase, club } = await requireClub("/dashboard/club/logo");
   const { error } = await supabase
-    .from("clubs")
+    .from("club")
     .update({ logo_url: parsed.data })
-    .eq("id", club.id)
-    .eq("owner_id", user.id);
+    .eq("id", club.id);
 
   if (error) {
     return { ok: false, message: error.message };

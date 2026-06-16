@@ -23,6 +23,7 @@ import {
 } from "@/app/dashboard/data";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type StatCardProps = {
   label: string;

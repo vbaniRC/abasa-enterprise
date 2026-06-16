@@ -3,6 +3,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EyeIcon,
+  PlusIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
@@ -18,6 +19,7 @@ import { getMembers } from "@/app/dashboard/members/_lib/actions";
 import type { MemberStatus } from "@/app/dashboard/members/_lib/types";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type PageProps = {
   searchParams?: Record<string, string | string[] | undefined>;
@@ -72,9 +74,18 @@ export default async function MembersPage({ searchParams }: PageProps) {
       title="Members"
       description="Search, filter, and review members assigned to your authenticated club."
       action={
-        <div className="rounded-2xl border border-white/10 bg-white/10 px-5 py-4 text-sm text-slate-200">
-          <p className="font-semibold text-white">{result.count} members</p>
-          <p className="mt-1 text-slate-300">Single-club member directory</p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="rounded-2xl border border-white/10 bg-white/10 px-5 py-4 text-sm text-slate-200">
+            <p className="font-semibold text-white">{result.count} members</p>
+            <p className="mt-1 text-slate-300">Single-club member directory</p>
+          </div>
+          <Link
+            href="/dashboard/members/add"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-200 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-white"
+          >
+            <PlusIcon className="h-5 w-5" />
+            Add Member
+          </Link>
         </div>
       }
     >

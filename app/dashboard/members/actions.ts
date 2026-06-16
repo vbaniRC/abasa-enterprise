@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 import { z } from "zod";
 
 import { requireUserClubId } from "@/app/dashboard/members/_lib/server";
@@ -23,6 +24,7 @@ export type MemberFormValues = {
   phone: string;
   date_of_birth: string;
   active: boolean;
+  club_role: "member" | "admin";
 };
 
 const memberFormSchema = z.object({
@@ -44,6 +46,7 @@ const memberFormSchema = z.object({
       message: "Enter a valid birth date.",
     }),
   active: z.coerce.boolean().default(true),
+  club_role: z.enum(["member", "admin"]).default("member"),
 });
 
 const memberIdSchema = z.coerce.number().int().positive();
@@ -63,6 +66,7 @@ function parseMemberForm(formData: FormData) {
     phone: getString(formData, "phone"),
     date_of_birth: getString(formData, "date_of_birth"),
     active: formData.get("active") === "true",
+    club_role: getString(formData, "club_role") || "member",
   });
 }
 
@@ -79,6 +83,7 @@ function formError(error: z.ZodError<ParsedMemberFormValues>): MemberFormState {
       phone: flattened.phone?.[0],
       date_of_birth: flattened.date_of_birth?.[0],
       active: flattened.active?.[0],
+      club_role: flattened.club_role?.[0],
     },
   };
 }
@@ -87,6 +92,93 @@ function cleanOptional(value: string) {
   const trimmed = value.trim();
 
   return trimmed.length > 0 ? trimmed : null;
+}
+
+async function findAuthUserIdByEmail(
+  supabase: Awaited<ReturnType<typeof requireUserClubId>>["supabase"],
+  email: string
+) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  for (let page = 1; page <= 10; page += 1) {
+    const { data, error } = await supabase.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    const users = data.users as User[];
+    const user = users.find(
+      (candidate) => candidate.email?.toLowerCase() === normalizedEmail
+    );
+
+    if (user || users.length < 1000) {
+      return user?.id ?? null;
+    }
+  }
+
+  return null;
+}
+
+async function findProfileUserIdByEmail(
+  supabase: Awaited<ReturnType<typeof requireUserClubId>>["supabase"],
+  email: string
+) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id")
+    .ilike("email", email.trim().toLowerCase())
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data?.id ?? null;
+}
+
+async function resolveProfileUserId(
+  supabase: Awaited<ReturnType<typeof requireUserClubId>>["supabase"],
+  email: string
+) {
+  return (
+    (await findProfileUserIdByEmail(supabase, email)) ??
+    (await findAuthUserIdByEmail(supabase, email))
+  );
+}
+
+async function upsertMemberProfileRole({
+  supabase,
+  clubId,
+  userId,
+  fullName,
+  email,
+  role,
+}: {
+  supabase: Awaited<ReturnType<typeof requireUserClubId>>["supabase"];
+  clubId: string;
+  userId: string;
+  fullName: string;
+  email: string;
+  role: "member" | "admin";
+}) {
+  const { error } = await supabase.from("profiles").upsert(
+    {
+      id: userId,
+      full_name: fullName,
+      email: email.trim().toLowerCase(),
+      role,
+      club_id: clubId,
+    },
+    { onConflict: "id" }
+  );
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }
 
 export async function createMember(
@@ -105,6 +197,28 @@ export async function createMember(
     return { ok: false, message: "Club not found." };
   }
 
+  const fullName = `${parsed.data.first_name} ${parsed.data.last_name}`.trim();
+  let profileUserId: string | null = null;
+
+  try {
+    profileUserId = await resolveProfileUserId(supabase, parsed.data.email);
+  } catch (error) {
+    return {
+      ok: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Unable to verify the member user account.",
+    };
+  }
+
+  if (parsed.data.club_role === "admin" && !profileUserId) {
+    return {
+      ok: false,
+      message: "Admin rights can only be assigned to an existing user account.",
+    };
+  }
+
   const payload: MemberInsert = {
     club_id: clubId,
     first_name: parsed.data.first_name,
@@ -119,6 +233,27 @@ export async function createMember(
 
   if (error) {
     return { ok: false, message: error.message };
+  }
+
+  if (profileUserId) {
+    try {
+      await upsertMemberProfileRole({
+        supabase,
+        clubId,
+        userId: profileUserId,
+        fullName,
+        email: parsed.data.email,
+        role: parsed.data.club_role,
+      });
+    } catch (error) {
+      return {
+        ok: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unable to update the member club role.",
+      };
+    }
   }
 
   revalidatePath("/dashboard/members");

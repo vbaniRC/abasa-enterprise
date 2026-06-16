@@ -10,6 +10,7 @@ import {
 import { getClubContext, getClubMember } from "@/app/dashboard/club/_lib/data";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type PageProps = {
   params: { id: string };

@@ -37,6 +37,7 @@ const clientSchema = z.object({
       message: "Enter a valid birth date.",
     }),
   active: z.boolean(),
+  club_role: z.enum(["member", "admin"]),
 });
 
 function SubmitButton({ mode }: { mode: "create" | "edit" }) {
@@ -60,6 +61,10 @@ function SubmitButton({ mode }: { mode: "create" | "edit" }) {
 }
 
 function fieldValue(initialData: MemberRecord | undefined, key: keyof MemberFormValues) {
+  if (key === "club_role") {
+    return "member";
+  }
+
   if (!initialData) {
     return key === "active" ? true : "";
   }
@@ -84,6 +89,7 @@ export function MemberForm({ mode, initialData, onSubmit }: MemberFormProps) {
       phone: String(fieldValue(initialData, "phone")),
       date_of_birth: String(fieldValue(initialData, "date_of_birth")),
       active: Boolean(fieldValue(initialData, "active")),
+      club_role: fieldValue(initialData, "club_role") as "member" | "admin",
     }),
     [initialData]
   );
@@ -121,6 +127,7 @@ export function MemberForm({ mode, initialData, onSubmit }: MemberFormProps) {
       phone: flattened.phone?.[0],
       date_of_birth: flattened.date_of_birth?.[0],
       active: flattened.active?.[0],
+      club_role: flattened.club_role?.[0],
     });
   }
 
@@ -241,6 +248,33 @@ export function MemberForm({ mode, initialData, onSubmit }: MemberFormProps) {
             <option value="false">Inactive</option>
           </select>
         </label>
+
+        {mode === "create" ? (
+          <label className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 md:col-span-2">
+            <input type="hidden" name="club_role" value={values.club_role} />
+            <span>
+              <span className="block text-sm font-medium text-slate-300">
+                Grant admin rights
+              </span>
+              <span className="text-sm text-slate-500">
+                Updates the matching user profile for this club to admin.
+              </span>
+            </span>
+            <input
+              type="checkbox"
+              checked={values.club_role === "admin"}
+              onChange={(event) =>
+                updateField("club_role", event.target.checked ? "admin" : "member")
+              }
+              className="h-5 w-5 rounded border-white/10 bg-slate-950 text-blue-200 focus:ring-blue-200"
+            />
+            {errors.club_role ? (
+              <p className="mt-2 text-sm text-rose-200">{errors.club_role}</p>
+            ) : null}
+          </label>
+        ) : (
+          <input type="hidden" name="club_role" value="member" />
+        )}
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
