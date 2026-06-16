@@ -115,6 +115,7 @@ export default function Sidebar({ children, className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
+  const [isTriggerHovered, setIsTriggerHovered] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 1024px)");
@@ -170,12 +171,15 @@ export default function Sidebar({ children, className }: SidebarProps) {
         type="button"
         aria-label={triggerLabel}
         aria-expanded={!isCollapsed}
+        onBlur={() => setIsTriggerHovered(false)}
+        onFocus={() => setIsTriggerHovered(true)}
         onClick={handleToggle}
+        onPointerEnter={() => setIsTriggerHovered(true)}
+        onPointerLeave={() => setIsTriggerHovered(false)}
         className="group fixed left-0 top-1/2 z-[70] flex h-24 w-8 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-sky-300/25 bg-surface-overlay/95 text-content shadow-lg ring-1 ring-black/20 transition-colors duration-[180ms] ease-in-out hover:border-sky-300/70 hover:bg-sky-400/15 hover:text-sky-100 focus-visible:z-[80]"
       >
-        <span className="block font-mono text-xl font-semibold leading-none group-hover:hidden">|</span>
-        <span className="hidden font-mono text-xl font-semibold leading-none group-hover:block">
-          {triggerDirection}
+        <span className="font-mono text-xl font-semibold leading-none">
+          {isTriggerHovered ? triggerDirection : "|"}
         </span>
       </button>
 
