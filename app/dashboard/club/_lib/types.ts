@@ -1,26 +1,21 @@
-export type Club = {
+import type { Database } from "@/types/supabase";
+
+type ClubRow = Database["public"]["Tables"]["club"]["Row"];
+type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
+
+export type Club = ClubRow & {
   id: string;
   owner_id: string;
-  name: string;
   address: string | null;
-  city: string | null;
-  country: string | null;
   phone: string | null;
   email: string | null;
-  logo_url: string | null;
-  created_at: string | null;
 };
 
-export type Profile = {
-  id: string;
-  full_name: string | null;
+export type Profile = Omit<ProfileRow, "role"> & {
   role: string | null;
-  club_id: string | null;
   avatar_url?: string | null;
-  email?: string | null;
   status?: string | null;
   joined_at?: string | null;
-  created_at?: string | null;
   additional_data?: {
     status?: string | null;
     [key: string]: unknown;

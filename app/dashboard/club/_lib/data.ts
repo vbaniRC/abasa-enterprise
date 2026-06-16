@@ -3,11 +3,14 @@ import "server-only";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
+import type { Database } from "@/types/supabase";
 
 import { requireDashboardUser } from "./server";
 import type { Club, MemberProfile, Profile } from "./types";
 
 const PROFILE_SELECT = "*";
+type Supabase = SupabaseClient<Database>;
+type ClubRow = Database["public"]["Tables"]["club"]["Row"];
 
 function normalizeProfile(profile: Profile): Profile {
   return {
@@ -21,8 +24,18 @@ function normalizeProfile(profile: Profile): Profile {
   };
 }
 
+function normalizeClub(club: ClubRow, ownerId: string): Club {
+  return {
+    ...club,
+    owner_id: ownerId,
+    address: club.adresa_sjedista,
+    phone: club.sluzbeni_telefon,
+    email: club.sluzbeni_email,
+  };
+}
+
 async function withAuthEmails<T extends Profile>(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   profiles: T[]
 ): Promise<T[]> {
   const hydrated = await Promise.all(
@@ -44,62 +57,123 @@ async function withAuthEmails<T extends Profile>(
 }
 
 export async function getOwnedClub(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   userId: string
 ): Promise<Club | null> {
-  const { data, error } = await supabase
-    .from("clubs")
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select(PROFILE_SELECT)
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  if (!profile?.club_id) {
+    return null;
+  }
+
+  const { data: club, error } = await supabase
+    .from("club")
     .select("*")
-    .eq("owner_id", userId)
+    .eq("id", profile.club_id)
     .maybeSingle();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  return data as Club | null;
-}
-
-export async function getClubContext(): Promise<{
-  user: User;
-  supabase: SupabaseClient;
-  club: Club | null;
-  owner: Profile | null;
-}> {
-  const user = await requireDashboardUser();
-  const supabase = createSupabaseAdminClient();
-  const club = await getOwnedClub(supabase, user.id);
-
   if (!club) {
-    return { user, supabase, club: null, owner: null };
+    return null;
   }
 
   const { data: ownerProfile } = await supabase
     .from("profiles")
     .select(PROFILE_SELECT)
-    .eq("id", club.owner_id)
+    .eq("club_id", profile.club_id)
+    .eq("is_owner", true)
     .maybeSingle();
 
+  return normalizeClub(club, ownerProfile?.id ?? profile.id);
+}
+
+export async function getClubContext(): Promise<{
+  user: User;
+  supabase: Supabase;
+  club: Club | null;
+  owner: Profile | null;
+  profile: Profile | null;
+}> {
+  const user = await requireDashboardUser();
+  const supabase = createSupabaseAdminClient();
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select(PROFILE_SELECT)
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  if (!profile?.club_id) {
+    return { user, supabase, club: null, owner: null, profile: null };
+  }
+
+  const { data: clubRow, error: clubError } = await supabase
+    .from("club")
+    .select("*")
+    .eq("id", profile.club_id)
+    .maybeSingle();
+
+  if (clubError) {
+    throw new Error(clubError.message);
+  }
+
+  if (!clubRow) {
+    return {
+      user,
+      supabase,
+      club: null,
+      owner: null,
+      profile: normalizeProfile(profile as Profile),
+    };
+  }
+
+  const { data: ownerProfile } = await supabase
+    .from("profiles")
+    .select(PROFILE_SELECT)
+    .eq("club_id", profile.club_id)
+    .eq("is_owner", true)
+    .maybeSingle();
+
+  const normalizedProfile = normalizeProfile(profile as Profile);
   const [owner] = await withAuthEmails(
     supabase,
     ownerProfile
-      ? [{ ...(ownerProfile as Profile), email: user.email ?? null }]
-      : [
-          {
-            id: user.id,
-            full_name: user.user_metadata?.full_name ?? null,
-            role: "owner",
-            club_id: club.id,
-            email: user.email ?? null,
-          },
-        ]
+      ? [ownerProfile as Profile]
+      : profile.is_owner
+        ? [normalizedProfile]
+        : [
+            {
+              id: user.id,
+              full_name: user.user_metadata?.full_name ?? null,
+              role: "owner",
+              club_id: profile.club_id,
+              email: user.email ?? null,
+              is_owner: true,
+              created_at: null,
+            },
+          ]
   );
+  const club = normalizeClub(clubRow, owner?.id ?? profile.id);
 
-  return { user, supabase, club, owner };
+  return { user, supabase, club, owner, profile: normalizedProfile };
 }
 
 export async function getClubCoaches(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   clubId: string
 ): Promise<Profile[]> {
   const { data, error } = await supabase
@@ -117,7 +191,7 @@ export async function getClubCoaches(
 }
 
 export async function getClubMembers(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   clubId: string,
   options: { page: number; search: string; pageSize: number }
 ): Promise<{ members: MemberProfile[]; count: number }> {
@@ -152,7 +226,7 @@ export async function getClubMembers(
 }
 
 export async function getClubMember(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   clubId: string,
   memberId: string
 ): Promise<MemberProfile | null> {
@@ -182,7 +256,7 @@ export async function getClubMember(
 }
 
 export async function findAuthUserByEmail(
-  supabase: SupabaseClient,
+  supabase: Supabase,
   email: string
 ) {
   const normalizedEmail = email.trim().toLowerCase();
