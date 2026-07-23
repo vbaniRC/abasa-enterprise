@@ -48,7 +48,7 @@ export default function LandingPage() {
         {texts.map((text, i) => (
           <p
             key={i}
-            className={`absolute left-[15px] -translate-y-[300px] text-white text-[1.5rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
+            className={`absolute left-[15px] -translate-y-[300px] text-white text-[2.5rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
           >
