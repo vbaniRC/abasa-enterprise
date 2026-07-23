@@ -12,7 +12,7 @@ export default function LandingPage() {
 
   const texts = [
     "REVOLUTION IN MEMBERSHIP ADMINISTRATION",
-    "Digitalize your sports organization.",
+    "Digitalize your sports, social or any membership organization.",
     "Manage memberships, coaches, and training sessions.",
     "ABASA — your club, your rules.",
   ];
