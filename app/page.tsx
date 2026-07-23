@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function LandingPage() {
   const images = [
+    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page_SR.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_tenis.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_3.png",
@@ -14,6 +15,7 @@ export default function LandingPage() {
     "REVOLUTION IN MEMBERSHIP ADMINISTRATION",
     "Digitalize your sports, social or any membership organization.",
     "Manage memberships, coaches, and training sessions.",
+    "Manage payments, credit cards, total automation.",
     "ABASA — your club, your rules.",
   ];
 
