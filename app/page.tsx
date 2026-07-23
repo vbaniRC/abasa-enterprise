@@ -36,7 +36,7 @@ export default function LandingPage() {
       {images.map((src, i) => (
         <div
           key={i}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[3000ms] ease-in-out ${
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms] ease-in-out ${
             i === index ? "opacity-100" : "opacity-0"
           }`}
           style={{ backgroundImage: `url('${src}')` }}
@@ -48,7 +48,7 @@ export default function LandingPage() {
         {texts.map((text, i) => (
           <p
             key={i}
-            className={`absolute left-[15px] -translate-y-[300px] text-white text-[2.5rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
+            className={`absolute left-[15px] -translate-y-[300px] text-white text-[1.2rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
           >
