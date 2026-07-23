@@ -24,7 +24,7 @@ export default function LandingPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 8000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
@@ -36,7 +36,7 @@ export default function LandingPage() {
       {images.map((src, i) => (
         <div
           key={i}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms] ease-in-out ${
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[3000ms] ease-in-out ${
             i === index ? "opacity-100" : "opacity-0"
           }`}
           style={{ backgroundImage: `url('${src}')` }}
