@@ -46,14 +46,24 @@ export default function LandingPage() {
       {/* Fixed-position rotating text */}
       <div className="absolute inset-0 flex items-center z-30">
         {texts.map((text, i) => (
-          <p
-            key={i}
-            className={`absolute left-[15px] -translate-y-[300px] text-white text-[1.2rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {text}
-          </p>
+         // <p
+         //   key={i}
+         //   className={`absolute left-[15px] -translate-y-[300px] text-white text-[1.2rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
+         //     i === index ? "opacity-100" : "opacity-0"
+         //   }`}
+         // >
+          //  {text}
+         // </p>
+      <p
+  key={i}
+  className={`absolute bottom-[200px] left-1/2 -translate-x-1/2 
+              text-white text-[1.2rem] font-semibold drop-shadow-lg 
+              max-w-3xl text-center transition-opacity duration-[2000ms] ease-in-out 
+              ${i === index ? "opacity-100" : "opacity-0"}`}
+>
+  {text}
+</p>
+      // obrisati ako ne valja ovo iznad
         ))}
       </div>
 
