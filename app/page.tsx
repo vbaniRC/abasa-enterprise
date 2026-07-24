@@ -57,7 +57,7 @@ export default function LandingPage() {
       <p
   key={i}
   className={`absolute bottom-[200px] left-1/2 -translate-x-1/2 
-              text-white text-[1.2rem] font-semibold drop-shadow-lg 
+              text-white text-[3.2rem] font-semibold drop-shadow-lg 
               max-w-3xl text-center transition-opacity duration-[2000ms] ease-in-out 
               ${i === index ? "opacity-100" : "opacity-0"}`}
 >
