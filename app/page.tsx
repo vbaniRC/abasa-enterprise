@@ -7,6 +7,7 @@ export default function LandingPage() {
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page_SR.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_tenis.png",
+    "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/landing_page_SR.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_3.png",
     "https://grvomwpejsgokxcandkr.supabase.co/storage/v1/object/public/public-assets/Landing_page_4.png",
   ];
