@@ -16,6 +16,7 @@ export default function LandingPage() {
     "REVOLUTION IN MEMBERSHIP ADMINISTRATION",
     "Digitalize your sports, social or any membership organization.",
     "Manage memberships, coaches, and training sessions.",
+    "Free of Charge",
     "Manage payments, credit cards, total automation.",
     "ABASA — your club, your rules.",
   ];
