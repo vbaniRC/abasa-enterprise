@@ -22,50 +22,61 @@ export default function LandingPage() {
   ];
 
   const [index, setIndex] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
+  // PRELOAD all images
   useEffect(() => {
+    const preload = images.map((src) => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+
+    Promise.all(
+      preload.map(
+        (img) =>
+          new Promise((resolve) => {
+            img.onload = resolve;
+          })
+      )
+    ).then(() => setLoaded(true));
+  }, []);
+
+  // ROTATION
+  useEffect(() => {
+    if (!loaded) return;
+
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 4000);
+    }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [loaded]);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
-      {/* Rotating background images */}
-      {images.map((src, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[1500ms] ease-in-out ${
-            i === index ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ backgroundImage: `url('${src}')` }}
-        />
-      ))}
+      {/* Single rotating background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[1500ms]"
+        style={{
+          backgroundImage: `url('${images[index]}')`,
+          opacity: loaded ? 1 : 0,
+        }}
+      />
 
-      {/* Fixed-position rotating text */}
-      <div className="absolute inset-0 flex items-center z-30">
+      {/* Text */}
+      <div className="absolute inset-0 flex items-center justify-center z-30">
         {texts.map((text, i) => (
-         // <p
-         //   key={i}
-         //   className={`absolute left-[15px] -translate-y-[300px] text-white text-[1.2rem] font-semibold drop-shadow-lg max-w-3xl text-left transition-opacity duration-[2000ms] ease-in-out ${
-         //     i === index ? "opacity-100" : "opacity-0"
-         //   }`}
-         // >
-          //  {text}
-         // </p>
-      <p
-  key={i}
-  className={`absolute bottom-[150px] left-1/2 -translate-x-1/2 
+          <p
+            key={i}
+            className={`absolute bottom-[150px] left-1/2 -translate-x-1/2 
               text-white text-[2.2rem] font-semibold drop-shadow-lg 
-              max-w-3xl text-center transition-opacity duration-[1500ms] ease-in-out 
+              max-w-3xl text-center transition-opacity duration-[1000ms] ease-in-out 
               ${i === index ? "opacity-100" : "opacity-0"}`}
->
-  {text}
-</p>
-      // obrisati ako ne valja ovo iznad
+          >
+            {text}
+          </p>
         ))}
       </div>
 
@@ -94,7 +105,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Dark overlay */}
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black/40 z-10"></div>
     </main>
   );
