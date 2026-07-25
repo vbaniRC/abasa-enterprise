@@ -67,7 +67,7 @@ export default function LandingPage() {
         <div className="text-left">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
           <p className="text-sm text-white opacity-90 drop-shadow">
-            Welcome to the Club administration platform.
+            Club administration platform.
           </p>
         </div>
 
