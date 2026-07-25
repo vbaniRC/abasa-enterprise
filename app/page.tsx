@@ -22,46 +22,35 @@ export default function LandingPage() {
   ];
 
   const [index, setIndex] = useState(0);
-  const [loaded, setLoaded] = useState(false);
+  const [prevIndex, setPrevIndex] = useState(0);
 
-  // PRELOAD all images
   useEffect(() => {
-    const preload = images.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return img;
-    });
-
-    Promise.all(
-      preload.map(
-        (img) =>
-          new Promise((resolve) => {
-            img.onload = resolve;
-          })
-      )
-    ).then(() => setLoaded(true));
-  }, []);
-
-  // ROTATION
-  useEffect(() => {
-    if (!loaded) return;
-
     const interval = setInterval(() => {
+      setPrevIndex(index);
       setIndex((prev) => (prev + 1) % images.length);
     }, 6000);
 
     return () => clearInterval(interval);
-  }, [loaded]);
+  }, [index]);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
-      {/* Single rotating background */}
+      {/* Previous image (fade-out) */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms]"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms]"
+        style={{
+          backgroundImage: `url('${images[prevIndex]}')`,
+          opacity: 0,
+        }}
+      />
+
+      {/* Current image (fade-in) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms]"
         style={{
           backgroundImage: `url('${images[index]}')`,
-          opacity: loaded ? 1 : 0,
+          opacity: 1,
         }}
       />
 
@@ -72,7 +61,7 @@ export default function LandingPage() {
             key={i}
             className={`absolute bottom-[150px] left-1/2 -translate-x-1/2 
               text-white text-[2.2rem] font-semibold drop-shadow-lg 
-              max-w-3xl text-center transition-opacity duration-[3000ms] ease-in-out 
+              max-w-3xl text-center transition-opacity duration-[2000ms] ease-in-out 
               ${i === index ? "opacity-100" : "opacity-0"}`}
           >
             {text}
