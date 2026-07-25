@@ -22,37 +22,30 @@ export default function LandingPage() {
   ];
 
   const [index, setIndex] = useState(0);
-  const [prevIndex, setPrevIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPrevIndex(index);
       setIndex((prev) => (prev + 1) % images.length);
     }, 6000);
 
     return () => clearInterval(interval);
-  }, [index]);
+  }, []);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
-      {/* Fade-out previous image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms]"
-        style={{
-          backgroundImage: `url('${images[prevIndex]}')`,
-          opacity: 0,
-        }}
-      />
-
-      {/* Fade-in current image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms]"
-        style={{
-          backgroundImage: `url('${images[index]}')`,
-          opacity: 1,
-        }}
-      />
+      {/* TRUE FADE — each image has its own opacity */}
+      {images.map((src, i) => (
+        <div
+          key={i}
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat 
+                      transition-opacity duration-[2500ms] ease-in-out`}
+          style={{
+            backgroundImage: `url('${src}')`,
+            opacity: i === index ? 1 : 0,
+          }}
+        />
+      ))}
 
       {/* Text */}
       <div className="absolute inset-0 flex items-center justify-center z-30">
