@@ -36,18 +36,18 @@ export default function LandingPage() {
   return (
     <main className="relative min-h-screen w-full overflow-hidden">
 
-      {/* Previous image (fade-out) */}
+      {/* Fade-out previous image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms]"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms]"
         style={{
           backgroundImage: `url('${images[prevIndex]}')`,
           opacity: 0,
         }}
       />
 
-      {/* Current image (fade-in) */}
+      {/* Fade-in current image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2000ms]"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2500ms]"
         style={{
           backgroundImage: `url('${images[index]}')`,
           opacity: 1,
@@ -61,7 +61,7 @@ export default function LandingPage() {
             key={i}
             className={`absolute bottom-[150px] left-1/2 -translate-x-1/2 
               text-white text-[2.2rem] font-semibold drop-shadow-lg 
-              max-w-3xl text-center transition-opacity duration-[2000ms] ease-in-out 
+              max-w-3xl text-center transition-opacity duration-[2500ms] ease-in-out 
               ${i === index ? "opacity-100" : "opacity-0"}`}
           >
             {text}
