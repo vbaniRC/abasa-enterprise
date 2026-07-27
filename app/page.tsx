@@ -66,7 +66,7 @@ export default function LandingPage() {
       <header className="absolute top-0 left-0 w-full flex items-center justify-between px-8 py-6 z-30">
         <div className="text-left">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">ABASA</h1>
-          <p className="text-sm text-white opacity-90 drop-shadow">
+          <p className="text-[0.8rem] text-white opacity-90 drop-shadow">
             Club administration platform.
           </p>
         </div>
