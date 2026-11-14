@@ -16,7 +16,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between mb-10">
       <div>
-        <h1 className="text-2xl font-bold">ABASA Sport</h1>
+        <h1 className="text-2xl font-bold">ABASA Membership</h1>
         <p className="text-gray-500 text-sm">
           Club management dashboard
         </p>
