@@ -19,7 +19,7 @@ export default function Sidebar() {
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col justify-between">
       <div>
         <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold">ABASA Sport</h2>
+          <h2 className="text-xl font-bold">ABASA Membership</h2>
           <p className="text-sm text-gray-500">Management Panel</p>
         </div>
 
